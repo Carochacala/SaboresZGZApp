@@ -12,6 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SaboresZGZ">
         <activity
+            android:name=".DetallePlato"
+            android:exported="false" />
+        <activity
+            android:name=".DetalleRestaurante"
+            android:exported="false" />
+        <activity
+            android:name=".SeleccionRestaurantes"
+            android:exported="false" />
+        <activity
+            android:name=".SeleccionPais"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
