@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Titulos">
+        <item name="android:textSize">@dimen/texto_titulo_grande</item>
+        <item name="android:textColor">@color/rojo</item>
+        <item name="android:fontFamily">@font/montserrat</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Subtitulos">
+        <item name="android:textSize">@dimen/texto_normal</item>
+        <item name="android:textColor">@color/amarillo_mostaza</item>
+        <item name="android:fontFamily">@font/montserrat</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Texto">
+        <item name="android:textSize">@dimen/texto_pequeno</item>
+        <item name="android:textColor">@color/gris_oscurito</item>
+        <item name="android:fontFamily">@font/montserrat</item>
+    </style>
+</resources>
