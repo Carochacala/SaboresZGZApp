@@ -11,15 +11,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Sabores_ZGZ">
+
+        <!-- Pantalla de selección de tipo de comida -->
+        <activity
+            android:name=".TipoActivity"
+            android:exported="false" />
+
+        <!-- Pantalla de restaurantes -->
+        <activity
+            android:name=".RestauranteActivity"
+            android:exported="false" />
+
+        <!-- MainActivity, punto de entrada -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

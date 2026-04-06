@@ -1,23 +1,24 @@
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="16dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/gray_light"
+    android:padding="16dp">
 
     <!-- Header -->
     <TextView
         android:id="@+id/txtTitulo"
-        android:text="¿Qué te apetece hoy?"
+        android:text="¡Viaja con tu paladar!"
         android:textSize="22sp"
         android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <!-- RecyclerView -->
+    <!-- RecyclerView debajo del header -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerTipos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/txtTitulo"
         android:layout_marginTop="16dp"/>
-</LinearLayout>
+</RelativeLayout>
