@@ -22,7 +22,8 @@
             android:exported="false" />
         <activity
             android:name=".SeleccionRestaurantes"
-            android:exported="false" />
+            android:exported="true" />
+
         <activity
             android:name=".SeleccionPais"
             android:exported="false" />
@@ -34,6 +35,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
         <meta-data
