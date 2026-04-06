@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "485950113186",
+    "project_id": "sabores-zgz",
+    "storage_bucket": "sabores-zgz.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:485950113186:android:ad2be054b3fdd355a55efb",
+        "android_client_info": {
+          "package_name": "com.comenendez.sabores_zgz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQttQKgLdvgGiCICNrFY_2It4oiRB3M9w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
