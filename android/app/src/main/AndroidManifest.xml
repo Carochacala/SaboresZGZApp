@@ -11,18 +11,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Sabores_ZGZ">
-
-        <!-- Pantalla de selección de tipo de comida -->
         <activity
-            android:name=".TipoActivity"
+            android:name=".RegistroActivity"
             android:exported="false" />
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false" /> <!-- Pantalla de selección de tipo de comida -->
+        <activity
+            android:name=".TiposComidaActivity"
+            android:exported="false" /> <!-- Pantalla de restaurantes -->
 
-        <!-- Pantalla de restaurantes -->
         <activity
             android:name=".RestauranteActivity"
-            android:exported="false" />
-
-        <!-- MainActivity, punto de entrada -->
+            android:exported="false" /> <!-- MainActivity, punto de entrada -->
         <activity
             android:name=".DetallePais"
             android:exported="false" />
@@ -43,14 +44,10 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.comenendez.sabores_zgz;
+package com.comenendez.saboreszgz;
 
 public class TipoComida {
     private String nombre;

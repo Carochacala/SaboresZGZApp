@@ -1,5 +1,6 @@
-package com.comenendez.sabores_zgz;
+package com.comenendez.saboreszgz;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -70,6 +71,12 @@ public class TipoAdapter extends RecyclerView.Adapter<TipoAdapter.ViewHolder> {
                     break;
             }
             return false;
+        });
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), RestauranteActivity.class);
+            intent.putExtra("tipo", tipo.getNombre());
+            v.getContext().startActivity(intent);
         });
 
 

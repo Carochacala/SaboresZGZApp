@@ -1,4 +1,4 @@
-package com.comenendez.sabores_zgz;
+package com.comenendez.saboreszgz;
 
 import android.content.ContentValues;
 import android.content.Context;
