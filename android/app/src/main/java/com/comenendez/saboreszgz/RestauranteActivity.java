@@ -1,34 +1,91 @@
 package com.comenendez.saboreszgz;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
-import android.widget.LinearLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import com.comenendez.saboreszgz.data.FirebaseRepository;
+import com.comenendez.saboreszgz.model.Restaurante;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RestauranteActivity extends AppCompatActivity {
+
+    private RecyclerView rvRestaurantes;
+    private TextView tvTitulo;
+    private RestauranteAdapter adapter;
+    private List<Restaurante> restaurantes = new ArrayList<>();
+    private FirebaseRepository repository;
+    private String tipoCocina;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_restaurante);
 
-        LinearLayout layout = new LinearLayout(this);
-        layout.setOrientation(LinearLayout.VERTICAL);
+// Botón para abrir el mapa
+        Button btnMapa = findViewById(R.id.btnMapa);
 
-        TextView txt = new TextView(this);
-        txt.setTextSize(20);
+        rvRestaurantes = findViewById(R.id.rvRestaurantes);
+        tvTitulo = findViewById(R.id.tvTitulo);
 
-        // Recibir dato del Intent
-        String tipoSeleccionado = getIntent().getStringExtra("tipoSeleccionado");
+        // Recibir el dato del Intent
+        tipoCocina = getIntent().getStringExtra("tipo_cocina");
 
-        if (tipoSeleccionado != null) {
-            txt.setText("Restaurantes de tipo: " + tipoSeleccionado);
-        } else {
-            txt.setText("Pantalla de Restaurantes");
+        // Log para depurar
+        android.util.Log.d("PRUEBA", "tipo_cocina recibido: " + tipoCocina);
+
+        if (tipoCocina == null) {
+            tipoCocina = "Restaurantes";
         }
-        String tipo = getIntent().getStringExtra("tipo");
 
-        layout.addView(txt);
+        tvTitulo.setText(tipoCocina);
 
-        setContentView(layout);
+        rvRestaurantes.setLayoutManager(new GridLayoutManager(this, 2));
+
+        adapter = new RestauranteAdapter(restaurantes, restaurante -> {
+            Intent intent = new Intent(RestauranteActivity.this, DetalleRestauranteActivity.class);
+            intent.putExtra("restaurante_id", restaurante.getId());  // ✅ Enviamos solo el ID
+            startActivity(intent);
+        });
+
+        rvRestaurantes.setAdapter(adapter);
+
+        repository = FirebaseRepository.getInstance();
+        cargarRestaurantes();
+
+        btnMapa.setOnClickListener(v -> {
+            Intent intent = new Intent(RestauranteActivity.this, MapaActivity.class);
+            intent.putExtra("tipo_cocina", tipoCocina);
+            startActivity(intent);
+        });
+    }
+
+    private void cargarRestaurantes() {
+        android.util.Log.d("PRUEBA", "Buscando restaurantes con tipo: " + tipoCocina);
+
+        repository.getRestaurantesByTipo(tipoCocina, (value, error) -> {
+            if (error != null) {
+                android.util.Log.d("PRUEBA", "Error: " + error.getMessage());
+                return;
+            }
+
+            android.util.Log.d("PRUEBA", "Resultados encontrados: " + (value != null ? value.size() : 0));
+
+            restaurantes.clear();
+            if (value != null) {
+                for (QueryDocumentSnapshot doc : value) {
+                    Restaurante r = doc.toObject(Restaurante.class);
+                    r.setId(doc.getId());
+                    restaurantes.add(r);
+                    android.util.Log.d("PRUEBA", "Restaurante cargado: " + r.getNombre() + " - Tipo: " + r.getTipoCocinaPais());
+                }
+            }
+            adapter.updateList(restaurantes);
+        });
     }
 }

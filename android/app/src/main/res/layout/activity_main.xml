@@ -16,9 +16,9 @@
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/canva_final" />
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -59,6 +59,18 @@
             android:backgroundTint="#212121"
             android:text="Iniciar Sesión"
             android:textColor="#FFFFFF" />
+
+        <!-- BOTÓN GOOGLE DE PRUEBA -->
+        <Button
+            android:id="@+id/btnGoogleSignIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="#00BCD4"
+            android:text="INICIAR CON GOOGLE"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
         <Button
             android:id="@+id/btnInvitado"
             android:layout_width="match_parent"

@@ -1,31 +1,23 @@
 package com.comenendez.saboreszgz;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class TiposComidaActivity extends AppCompatActivity {
-
-    RecyclerView recyclerTipos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tipo_comida);
 
-        // RecyclerView
-
-
         RecyclerView recycler = findViewById(R.id.recyclerTipos);
-        recycler.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columnas
+        recycler.setLayoutManager(new GridLayoutManager(this, 2));
         recycler.setHasFixedSize(true);
-
 
         // Lista de tipos de comida
         List<TipoComida> listaTipos = new ArrayList<>();
@@ -43,11 +35,14 @@ public class TiposComidaActivity extends AppCompatActivity {
 
         // Adapter
         TipoAdapter adapter = new TipoAdapter(listaTipos, tipo -> {
-            // Acción al clickear un tipo de comida
-            Toast.makeText(this, "Seleccionaste: " + tipo.getNombre(), Toast.LENGTH_SHORT).show();
-            // Aquí puedes abrir RestauranteActivity
-        });
+            android.util.Log.d("PRUEBA", "1. Click en: " + tipo.getNombre());
 
+            Intent intent = new Intent(TiposComidaActivity.this, RestauranteActivity.class);
+            intent.putExtra("tipo_cocina", tipo.getNombre());
+            android.util.Log.d("PRUEBA", "2. Enviando tipo: " + tipo.getNombre());
+
+            startActivity(intent);
+        });
 
         recycler.setAdapter(adapter);
     }

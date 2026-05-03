@@ -21,6 +21,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         // 🔥 FIREBASE
+        // 🔥 Forzar cierre de sesión si queremos modo invitado limpio
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         TextView txtUser = findViewById(R.id.txtUser);

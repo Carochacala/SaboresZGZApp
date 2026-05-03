@@ -1,61 +1,99 @@
 package com.comenendez.saboreszgz;
 
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
+import com.comenendez.saboreszgz.model.Restaurante;
+import com.squareup.picasso.Picasso;
 import java.util.List;
 
 public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.RestauranteViewHolder> {
-    List <ModeloCajitaRestaurante> listaRestaurantes;
 
-    public RestauranteAdapter(List<ModeloCajitaRestaurante> listaRestaurantes) {
+    private List<Restaurante> listaRestaurantes;
+    private OnRestauranteClickListener listener;
+
+    // Interfaz para manejar clics
+    public interface OnRestauranteClickListener {
+        void onRestauranteClick(Restaurante restaurante);
+    }
+
+    public RestauranteAdapter(List<Restaurante> listaRestaurantes, OnRestauranteClickListener listener) {
         this.listaRestaurantes = listaRestaurantes;
+        this.listener = listener;
     }
 
     @Override
-    public RestauranteViewHolder onCreateViewHolder(@NonNull ViewGroup parent,int viewType){
-        android.view.View vista = android.view.LayoutInflater.from(parent.getContext()).inflate(R.layout.card_restaurante, parent, false);
+    public RestauranteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View vista = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.card_restaurante, parent, false);
         return new RestauranteViewHolder(vista);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RestauranteViewHolder holder, int position) {
+        Restaurante restauranteActual = listaRestaurantes.get(position);
+
+        holder.tvNombreR.setText(restauranteActual.getNombre());
+
+        // Si platoDestacado es una lista, muestra el primer elemento
+        if (restauranteActual.getPlatoDestacado() != null && !restauranteActual.getPlatoDestacado().isEmpty()) {
+            holder.tvdescripcionCortaR.setText(restauranteActual.getPlatoDestacado().get(0));
+        } else {
+            holder.tvdescripcionCortaR.setText("Plato destacado");
+        }
+
+        holder.rbestrellasR.setRating((float) restauranteActual.getValoracionMedia());
+
+        // Distancia - si no tienes este campo en Firestore, puedes ocultarlo o calcularlo
+        // Por ahora lo dejamos con valor predeterminado
+        holder.tvDistanciaR.setVisibility(View.GONE); // Ocultar si no lo usas
+
+        // Cargar imagen desde URL (fotoUrl)
+        if (restauranteActual.getFotoUrl() != null && !restauranteActual.getFotoUrl().isEmpty()) {
+            Picasso.get()
+                    .load(restauranteActual.getFotoUrl())
+                    .placeholder(R.drawable.plato_chino) // Imagen por defecto
+                    .error(android.R.drawable.ic_delete)
+                    .into(holder.imgRestaurante);
+        }
+
+        // Manejar clic
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onRestauranteClick(restauranteActual);
+            }
+        });
+
 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RestauranteViewHolder holder, int pos){
-        ModeloCajitaRestaurante restauranteActual = listaRestaurantes.get(pos);
-        holder.tvNombreR.setText(restauranteActual.getNombreRestaurante());
-        holder.tvdescripcionCortaR.setText(restauranteActual.getDescripcionCortaRestaurante());
-        holder.rbestrellasR.setRating(restauranteActual.getEstrellansRestaurante());
-        holder.imgRestaurante.setImageResource(restauranteActual.getImagenRestauranteGuardada());
-        holder.tvDistanciaR.setText(restauranteActual.getDistanciaRestaurante() + " km");
-
+    public int getItemCount() {
+        return listaRestaurantes != null ? listaRestaurantes.size() : 0;
     }
 
-    @Override
-    public int getItemCount(){
-        return listaRestaurantes.size();
-
+    // Método para actualizar la lista
+    public void updateList(List<Restaurante> nuevaLista) {
+        this.listaRestaurantes = nuevaLista;
+        notifyDataSetChanged();
     }
 
+    public static class RestauranteViewHolder extends RecyclerView.ViewHolder {
 
-    public class RestauranteViewHolder extends RecyclerView.ViewHolder {
-
-        TextView tvNombreR,tvdescripcionCortaR,tvDistanciaR;
+        TextView tvNombreR, tvdescripcionCortaR, tvDistanciaR;
         RatingBar rbestrellasR;
-        Integer imgRLocal;
-        String imgRNoLocal;
         ImageView imgRestaurante;
 
-
-        public RestauranteViewHolder(@NonNull android.view.View itemView) {
+        public RestauranteViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvNombreR=itemView.findViewById(R.id.tv_NombreRestaurante);
-            tvdescripcionCortaR=itemView.findViewById(R.id.tvDescripcionCortaRestaurante);
-            rbestrellasR=itemView.findViewById(R.id.rb_estrellasRestaurante);
+            tvNombreR = itemView.findViewById(R.id.tv_NombreRestaurante);
+            tvdescripcionCortaR = itemView.findViewById(R.id.tvDescripcionCortaRestaurante);
+            rbestrellasR = itemView.findViewById(R.id.rb_estrellasRestaurante);
             tvDistanciaR = itemView.findViewById(R.id.tv_distanciaRestaurante);
             imgRestaurante = itemView.findViewById(R.id.imgRestaurante);
         }
