@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Imagen del país: El ratio "1:1" la convierte en un cuadrado perfecto -->
+        <ImageView
+            android:id="@+id/imgPais"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@mipmap/ic_launcher" />
+
+        <!-- Filtro oscuro pegado a la imagen -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#4D000000"
+            app:layout_constraintBottom_toBottomOf="@+id/imgPais"
+            app:layout_constraintEnd_toEndOf="@+id/imgPais"
+            app:layout_constraintStart_toStartOf="@+id/imgPais"
+            app:layout_constraintTop_toTopOf="@+id/imgPais" />
+
+        <!-- Nombre del país en el centro -->
+        <TextView
+            android:id="@+id/tvNombrePais"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="México"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/imgPais"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imgPais" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

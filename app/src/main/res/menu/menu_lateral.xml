@@ -1,0 +1,27 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+<group android:id="@+id/grupo_principal" android:checkableBehavior="single">
+    <item
+        android:id="@+id/nav_perfil"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:title="Mi Perfil" />
+    <item
+        android:id="@+id/nav_favoritos"
+        android:icon="@android:drawable/btn_star_big_on"
+        android:title="Favoritos" />
+</group>
+
+<item android:title="Configuración">
+    <menu>
+        <item
+            android:id="@+id/nav_ajustes"
+            android:icon="@android:drawable/ic_menu_preferences"
+            android:title="Ajustes de la App" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@android:drawable/ic_lock_power_off"
+            android:title="Cerrar sesión" />
+    </menu>
+</item>
+
+</menu>

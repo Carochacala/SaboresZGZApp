@@ -1,59 +1,79 @@
 package com.comenendez.saboreszgz;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class SeleccionRestaurantes extends AppCompatActivity {
-    /* clase donde se selecciono el pais y muestra sus restaurantes
 
-     */
-    RecyclerView listaVisualRestaurantes;
+    private FirebaseFirestore db;
+    private List<Restaurante> listaRestaurantes;
+    private RecyclerView rvRestaurantes;
+
+    private RestauranteAdapter adaptador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_seleccion_restaurantes);
-        //  Conectaremos la variable de Java con el ID del XML
-        listaVisualRestaurantes=findViewById(R.id.rvRestaurantes);
-        //Le decimos a la lista que ordene las tarjetas de arriba hacia abajo,de preferencia en este caso linearlayout
-        listaVisualRestaurantes.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(this));
 
-        //EJEMPLO PRUEBAS MOMENTANEO
-        // 1. Preparamos los datos de prueba
-        List<ModeloCajitaRestaurante> listaDePrueba = new java.util.ArrayList<>();
+        db = FirebaseFirestore.getInstance();
+        listaRestaurantes = new ArrayList<>();
 
-        listaDePrueba.add(new ModeloCajitaRestaurante(
-                "La Parrilla Vegana",
-                "Comida deliciosa sin origen animal",
-                4.5f,
-                1.2f,
-                R.drawable.fondo_cuadrado,
-                ""
-        ));
+        TextView tvPais = findViewById(R.id.tvPaisSeleccionado);
+        rvRestaurantes = findViewById(R.id.rvRestaurantes);
+        rvRestaurantes.setLayoutManager(new LinearLayoutManager(this));
 
-        listaDePrueba.add(new ModeloCajitaRestaurante(
-                "El Rincón del Café",
-                "Desayunos y meriendas especiales",
-                5.0f,
-                3.5f,
-                R.drawable.fondo_cielo,
-                ""
-        ));
-        //le entrego al adaptador mi lista de prueba
-       RestauranteAdapter miAdaptadorRestaurante= new RestauranteAdapter(listaDePrueba);
-       //y le comunicamos a la lista que ese sera su adaptador
-        listaVisualRestaurantes.setAdapter(miAdaptadorRestaurante);
+        // 1. SOLO UNA VEZ: Recuperamos el país que viene de la pantalla anterior
+        String paisBuscado = getIntent().getStringExtra("PAIS_SELECCIONADO");
 
+        // 2. Si por algún error llega vacío, ponemos Bolivia por defecto
+        if (paisBuscado == null) {
+            paisBuscado = "Bolivia";
+        }
 
-
+        // 3. Mostramos el nombre en el título y cargamos los datos
+        tvPais.setText(paisBuscado.toUpperCase());
+        cargarDatosDesdeFirebase(paisBuscado);
     }
+
+
+    // Dentro de SeleccionRestaurantes.java
+
+    private void cargarDatosDesdeFirebase(String pais) {
+        db.collection("restaurantes")
+                .whereEqualTo("tipoCocinaPais", pais)
+                .get()
+                .addOnCompleteListener(task -> {
+
+                    if (task.isSuccessful()) {
+                        listaRestaurantes.clear();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Restaurante r = document.toObject(Restaurante.class);
+                            listaRestaurantes.add(r);
+                        }
+
+
+                        RestauranteAdapter adaptador = new RestauranteAdapter(listaRestaurantes);
+                        rvRestaurantes.setAdapter(adaptador);
+                    }
+                });
+        // 1. Buscamos el botón por el ID que pusimos en el XML
+        android.widget.ImageButton btnAtras = findViewById(R.id.btnAtras);
+
+// 2. Le asignamos la acción de "finalizar" la actividad actual
+        btnAtras.setOnClickListener(v -> {
+            finish(); // Esto cierra la pantalla de restaurantes y te devuelve a la de países
+        });
+    }
+
 }
