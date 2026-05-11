@@ -2,6 +2,7 @@ package com.comenendez.saboreszgz.UI;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -48,6 +49,9 @@ public class SeleccionRestaurantes extends AppCompatActivity {
 
         // 1. SOLO UNA VEZ: Recuperamos el país que viene de la pantalla anterior
         String paisBuscado = getIntent().getStringExtra("PAIS_SELECCIONADO");
+        //para el cuadrado en xml  de seleccionrestaurantes
+        TextView tvTitulo = findViewById(R.id.tvPaisSeleccionado);
+        ImageView imgHeader = findViewById(R.id.imgBanderaSeleccionada);
 
         // 2. Si por algún error llega vacío, ponemos Bolivia por defecto
         if (paisBuscado == null) {
@@ -95,6 +99,29 @@ public class SeleccionRestaurantes extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("SaboresZGZ");
         }
+        //mismo metodo para banderas ya aqui
+        if (paisBuscado != null) {
+            tvTitulo.setText(paisBuscado.toUpperCase());
+
+            // 1. Limpiamos el nombre para buscar la foto (méxico -> b_mexico)
+            String nombreLimpio = paisBuscado.toLowerCase().replace(" ", "");
+            nombreLimpio = java.text.Normalizer.normalize(nombreLimpio, java.text.Normalizer.Form.NFD);
+            nombreLimpio = nombreLimpio.replaceAll("\\p{M}", "");
+
+            String nombreArchivo = "b_" + nombreLimpio;
+
+            // 2. Buscamos el ID del dibujo
+            int idImagen = getResources().getIdentifier(nombreArchivo, "drawable", getPackageName());
+
+            // 3. Si existe, la ponemos. Si no, ponemos fondo_cielo.
+            if (idImagen != 0) {
+                imgHeader.setImageResource(idImagen);
+            } else {
+                imgHeader.setImageResource(R.drawable.fondo_cielo);
+            }
+        }
+
+
     }
     //para el MENU su metodo click
     // para el menu 3 lineas

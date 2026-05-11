@@ -8,13 +8,15 @@
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
         <!-- Imagen del país: El ratio "1:1" la convierte en un cuadrado perfecto -->
         <ImageView
-            android:id="@+id/imgPais"
+            android:id="@+id/imgBanderaPais"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scaleType="centerCrop"
@@ -25,15 +27,17 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@mipmap/ic_launcher" />
 
+
         <!-- Filtro oscuro pegado a la imagen -->
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="#4D000000"
-            app:layout_constraintBottom_toBottomOf="@+id/imgPais"
-            app:layout_constraintEnd_toEndOf="@+id/imgPais"
-            app:layout_constraintStart_toStartOf="@+id/imgPais"
-            app:layout_constraintTop_toTopOf="@+id/imgPais" />
+            app:layout_constraintBottom_toBottomOf="@+id/imgBanderaPais"
+            app:layout_constraintEnd_toEndOf="@+id/imgBanderaPais"
+            app:layout_constraintStart_toStartOf="@+id/imgBanderaPais"
+            app:layout_constraintTop_toTopOf="@+id/imgBanderaPais" />
+
 
         <!-- Nombre del país en el centro -->
         <TextView
@@ -45,10 +49,15 @@
             android:textColor="#FFFFFF"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/imgPais"
+            android:shadowColor="#FF000000"
+            android:shadowRadius="8"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            app:layout_constraintBottom_toBottomOf="@+id/imgBanderaPais"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imgPais" />
+            app:layout_constraintTop_toTopOf="@+id/imgBanderaPais" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -88,25 +88,46 @@ public class RestauranteElegido extends AppCompatActivity {
                         //PARA la ubicacion
                         // Así lo leeremos más adelante en
                         com.google.firebase.firestore.GeoPoint ubicacion = rest.getUbicacion();
-                        if (ubicacion != null && mapaRest != null) {
-                            mapaRest.getMapAsync(googleMap -> {
+                        if (ubicacion != null) {
+
+                            // --- 1. ACCIÓN DEL BOTÓN "CÓMO LLEGAR" ---
+                            botonComoLlegarRest.setOnClickListener(v -> {
                                 double lat = ubicacion.getLatitude();
                                 double lng = ubicacion.getLongitude();
-                                com.google.android.gms.maps.model.LatLng pos =
-                                        new com.google.android.gms.maps.model.LatLng(lat, lng);
+                                // Creamos la orden para abrir el GPS
+                                android.net.Uri gmmIntentUri = android.net.Uri.parse("google.navigation:q=" + lat + "," + lng+ "&mode=w");
+                                android.content.Intent mapIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW, gmmIntentUri);
+                                mapIntent.setPackage("com.google.android.apps.maps"); // Forzamos Google Maps
 
-                                // Añadimos el marcador rojo en el mapa
-                                googleMap.addMarker(new com.google.android.gms.maps.model.MarkerOptions()
-                                        .position(pos)
-                                        .title(rest.getNombre()));
-
-                                // Movemos la cámara para que el usuario vea el local
-                                googleMap.moveCamera(com.google.android.gms.maps.CameraUpdateFactory
-                                        .newLatLngZoom(pos, 16f));
+                                // Verificamos que el móvil tenga Maps instalado
+                                if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                                    startActivity(mapIntent);
+                                }
                             });
+
+                            // --- 2. DIBUJAR EL MAPA VISUAL ---
+                            if (mapaRest != null) {
+                                mapaRest.getMapAsync(googleMap -> {
+                                    double lat = ubicacion.getLatitude();
+                                    double lng = ubicacion.getLongitude();
+                                    com.google.android.gms.maps.model.LatLng pos = new com.google.android.gms.maps.model.LatLng(lat, lng);
+
+                                    // Añadimos el marcador rojo
+                                    googleMap.addMarker(new com.google.android.gms.maps.model.MarkerOptions()
+                                            .position(pos)
+                                            .title(rest.getNombre()));
+
+                                    // MUEVE LA CÁMARA (¡Aquí estaba! jaja)
+                                    googleMap.moveCamera(com.google.android.gms.maps.CameraUpdateFactory
+                                            .newLatLngZoom(pos, 16f));
+                                });
+                            }
                         }
                     }
 
                 });
     }
 }
+
+
+
