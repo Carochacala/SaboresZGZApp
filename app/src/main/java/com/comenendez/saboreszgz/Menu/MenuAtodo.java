@@ -1,10 +1,11 @@
-package com.comenendez.saboreszgz;
+package com.comenendez.saboreszgz.Menu;
 
-import android.content.Intent;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.comenendez.saboreszgz.R;
 import com.google.android.material.navigation.NavigationView;
 
 public class MenuAtodo {

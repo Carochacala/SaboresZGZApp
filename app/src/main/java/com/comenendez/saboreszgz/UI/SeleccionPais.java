@@ -1,4 +1,4 @@
-package com.comenendez.saboreszgz;
+package com.comenendez.saboreszgz.UI;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -10,12 +10,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.comenendez.saboreszgz.Adapters.PaisAdapter;
+import com.comenendez.saboreszgz.modelo.Pais;
+import com.comenendez.saboreszgz.R;
 import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SeleccionPais extends AppCompatActivity {
-
+    //PARA EL MENU (drawer)
     // Declaramos el toggle aquí fuera para que todos los métodos lo vean
     private ActionBarDrawerToggle toggle;
     private DrawerLayout drawerLayout;
@@ -30,17 +34,21 @@ public class SeleccionPais extends AppCompatActivity {
         rvPaises.setLayoutManager(new GridLayoutManager(this, 2));
 
         List<Pais> listaDePrueba = new ArrayList<>();
-        listaDePrueba.add(new Pais("Argentina"));
+        listaDePrueba.add(new Pais("Colombia"));
         listaDePrueba.add(new Pais("Bolivia"));
+        listaDePrueba.add(new Pais("Marruecos"));
+        listaDePrueba.add(new Pais("México"));
+        listaDePrueba.add(new Pais("Italia"));
+        listaDePrueba.add(new Pais("Japón"));
+        listaDePrueba.add(new Pais("EE UU"));
+        listaDePrueba.add(new Pais("India"));
+        listaDePrueba.add(new Pais("China"));
+        listaDePrueba.add(new Pais("Turquía"));
+        listaDePrueba.add(new Pais("Venezuela"));
+        listaDePrueba.add(new Pais("Grecia"));
         listaDePrueba.add(new Pais("Chile"));
         listaDePrueba.add(new Pais("Uruguay"));
-        listaDePrueba.add(new Pais("México"));
-        listaDePrueba.add(new Pais("Marruecos"));
-        listaDePrueba.add(new Pais("Francia"));
-        listaDePrueba.add(new Pais("Colombia"));
-        listaDePrueba.add(new Pais("Venezuela"));
         listaDePrueba.add(new Pais("Ecuador"));
-        listaDePrueba.add(new Pais("El Salvador"));
 
         PaisAdapter adaptador = new PaisAdapter(listaDePrueba);
         rvPaises.setAdapter(adaptador);

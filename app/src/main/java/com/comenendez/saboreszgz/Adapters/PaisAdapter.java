@@ -1,4 +1,4 @@
-package com.comenendez.saboreszgz;
+package com.comenendez.saboreszgz.Adapters;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -7,6 +7,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.comenendez.saboreszgz.modelo.Pais;
+import com.comenendez.saboreszgz.R;
+import com.comenendez.saboreszgz.UI.SeleccionRestaurantes;
+
 import java.util.List;
 
 public class PaisAdapter extends RecyclerView.Adapter<PaisAdapter.PaisViewHolder> {
@@ -20,7 +25,9 @@ public class PaisAdapter extends RecyclerView.Adapter<PaisAdapter.PaisViewHolder
     @Override
     public PaisViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Aquí "inflamos" (convertimos en código) el diseño XML de la tarjeta
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pais, parent, false);
+        //elegimos el cardview correspondiente
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pais,
+                parent, false);
         return new PaisViewHolder(view);
     }
 

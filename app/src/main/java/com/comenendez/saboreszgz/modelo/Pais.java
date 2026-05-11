@@ -1,4 +1,4 @@
-package com.comenendez.saboreszgz;
+package com.comenendez.saboreszgz.modelo;
 
 public class Pais {
     private String nombre;

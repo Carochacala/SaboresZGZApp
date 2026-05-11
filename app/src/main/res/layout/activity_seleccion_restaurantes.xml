@@ -6,13 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- 1. EL CONTENEDOR PRINCIPAL (Ahora sí envuelve todo el diseño) -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFFFFF">
 
-        <!-- Barra para el menu (3 lineas cm hamburguesa) -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -23,46 +21,57 @@
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
 
-
-        <!-- Título dinámico (Ej: COLOMBIA) -->
         <TextView
             android:id="@+id/tvPaisSeleccionado"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="16dp"
             android:text="PAÍS"
             android:textColor="#000000"
             android:textSize="28sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnAtras" />
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
         <TextView
             android:id="@+id/tvSubtitulo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
-            android:text="Restaurantes de comida internacional en Zaragoza"
+            android:text="Explora los sabores internacionales en Zaragoza"
             android:textAlignment="center"
             android:textColor="#666666"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvPaisSeleccionado" />
 
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvRestaurantes"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="12dp"
+            android:paddingBottom="80dp"
+            android:clipToPadding="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvSubtitulo" />
 
+        <ImageButton
+            android:id="@+id/btnAtras"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="#000000"
+            android:elevation="6dp"
+            android:src="@android:drawable/ic_menu_revert"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="#FDFDFD" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <!-- 2. EL MENÚ LATERAL -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"

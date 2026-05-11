@@ -1,12 +1,21 @@
-package com.comenendez.saboreszgz;
+package com.comenendez.saboreszgz.UI;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.comenendez.saboreszgz.Adapters.RestauranteAdapter;
+import com.comenendez.saboreszgz.modelo.Restaurante;
+import com.comenendez.saboreszgz.R;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -20,6 +29,10 @@ public class SeleccionRestaurantes extends AppCompatActivity {
     private RecyclerView rvRestaurantes;
 
     private RestauranteAdapter adaptador;
+
+    //para el menu en esta pantalla
+    private ActionBarDrawerToggle toggle;
+    private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +57,53 @@ public class SeleccionRestaurantes extends AppCompatActivity {
         // 3. Mostramos el nombre en el título y cargamos los datos
         tvPais.setText(paisBuscado.toUpperCase());
         cargarDatosDesdeFirebase(paisBuscado);
+
+
+
+        //SECCION CONFIG MENU
+        drawerLayout = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_perfil) {
+                // Abrir pantalla perfil
+            } else if (id == R.id.nav_favoritos) {
+                // Abrir pantalla favoritos
+            } else if (id == R.id.nav_logout) {
+                finish();
+            }
+            drawerLayout.closeDrawers();
+            return true;
+        });
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        // CONFIGURACIÓN DEL TOGGLE
+        toggle = new ActionBarDrawerToggle(
+                this,
+                drawerLayout,
+                toolbar, // hace que funcione el clic
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close
+        );
+
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("SaboresZGZ");
+        }
+    }
+    //para el MENU su metodo click
+    // para el menu 3 lineas
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (toggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
@@ -57,8 +117,10 @@ public class SeleccionRestaurantes extends AppCompatActivity {
 
                     if (task.isSuccessful()) {
                         listaRestaurantes.clear();
+                        //for encargado de leer doc /collection de cada doc que haya en firebase
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Restaurante r = document.toObject(Restaurante.class);
+                            r.setId(document.getId());
                             listaRestaurantes.add(r);
                         }
 

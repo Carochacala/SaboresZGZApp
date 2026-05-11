@@ -41,6 +41,7 @@ dependencies {
 
     // Herramienta para que aparezca la ventana de cuentas de Google
     implementation 'com.google.android.gms:play-services-auth:21.5.1'
+    implementation libs.recyclerview
 
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
@@ -52,4 +53,8 @@ dependencies {
 
     // Google Sign-In
     //implementation 'com.google.android.gms:play-services-auth:21.0.0'
+
+
+    //para las imagenes,conectando en firebase,descarga autom. de firebase
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
 }

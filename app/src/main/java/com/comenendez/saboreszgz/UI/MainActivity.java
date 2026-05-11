@@ -1,16 +1,16 @@
-package com.comenendez.saboreszgz;
+package com.comenendez.saboreszgz.UI;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.comenendez.saboreszgz.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Llamamos a nuestro cargador para que suba los datos a Firebase
-        CargadorDatosFirebase.cargarRestaurantesIniciales();
+        //CargadorDatosFirebase.cargarRestaurantesIniciales();
         // ------------------------------------
         // Inicializar Firebase Auth
         mAuth = FirebaseAuth.getInstance();

@@ -3,7 +3,7 @@
 
     <style name="Titulos">
         <item name="android:textSize">@dimen/texto_titulo_grande</item>
-        <item name="android:textColor">@color/rojo</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:fontFamily">@font/montserrat</item>
         <item name="android:textStyle">bold</item>
     </style>
