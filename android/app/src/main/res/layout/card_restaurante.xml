@@ -18,6 +18,7 @@
             android:id="@+id/imgRestaurante"
             android:layout_width="80dp"
             android:layout_height="80dp"
+            android:scaleType="centerCrop"
             android:background="#CCCCCC" />
         <LinearLayout
             android:layout_width="match_parent"

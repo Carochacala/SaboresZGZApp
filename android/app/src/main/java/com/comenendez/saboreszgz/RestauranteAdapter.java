@@ -12,6 +12,9 @@ import com.comenendez.saboreszgz.model.Restaurante;
 import com.squareup.picasso.Picasso;
 import java.util.List;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.RestauranteViewHolder> {
 
     private List<Restaurante> listaRestaurantes;
@@ -55,12 +58,16 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
 
         // Cargar imagen desde URL (fotoUrl)
         if (restauranteActual.getFotoUrl() != null && !restauranteActual.getFotoUrl().isEmpty()) {
-            Picasso.get()
+            Glide.with(holder.itemView.getContext())
                     .load(restauranteActual.getFotoUrl())
-                    .placeholder(R.drawable.plato_chino) // Imagen por defecto
+                    .placeholder(android.R.drawable.ic_delete)
                     .error(android.R.drawable.ic_delete)
+                    .centerCrop()
                     .into(holder.imgRestaurante);
+        } else {
+            holder.imgRestaurante.setImageResource(android.R.drawable.ic_delete);
         }
+
 
         // Manejar clic
         holder.itemView.setOnClickListener(v -> {
@@ -70,6 +77,20 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
         });
 
 
+    }
+    private void cargarImagen(String url, ImageView imageView) {
+        if (url == null || url.isEmpty()) {
+            imageView.setImageResource(android.R.drawable.ic_menu_gallery);
+            return;
+        }
+
+        Glide.with(imageView.getContext())
+                .load(url)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)  // ← Guarda en caché para offline
+                .placeholder(android.R.drawable.ic_menu_gallery)
+                .error(android.R.drawable.ic_menu_gallery)
+                .centerCrop()
+                .into(imageView);
     }
 
     @Override

@@ -68,6 +68,21 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_marginTop="8dp" />
+        <Button
+            android:id="@+id/btnRuta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📍 Abrir ruta en Google Maps"
+            android:backgroundTint="#4CAF50"
+            android:layout_marginTop="16dp" />
+
+        <Button
+            android:id="@+id/btnCompartir"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📤 Compartir restaurante"
+            android:backgroundTint="#2196F3"
+            android:layout_marginTop="8dp" />
 
         <!-- Valoraciones -->
         <TextView
@@ -97,6 +112,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Enviar" />
+
 
         </LinearLayout>
 

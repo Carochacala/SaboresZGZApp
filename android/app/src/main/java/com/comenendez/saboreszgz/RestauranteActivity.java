@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.comenendez.saboreszgz.data.FirebaseRepository;
 import com.comenendez.saboreszgz.model.Restaurante;
@@ -45,7 +46,7 @@ public class RestauranteActivity extends AppCompatActivity {
 
         tvTitulo.setText(tipoCocina);
 
-        rvRestaurantes.setLayoutManager(new GridLayoutManager(this, 2));
+        rvRestaurantes.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new RestauranteAdapter(restaurantes, restaurante -> {
             Intent intent = new Intent(RestauranteActivity.this, DetalleRestauranteActivity.class);

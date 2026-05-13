@@ -1,6 +1,7 @@
 package com.comenendez.saboreszgz;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +11,17 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.comenendez.saboreszgz.data.FirebaseRepository;
 import com.comenendez.saboreszgz.model.Restaurante;
 import com.comenendez.saboreszgz.model.Valoracion;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -23,7 +29,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +36,7 @@ public class DetalleRestauranteActivity extends AppCompatActivity implements OnM
 
     private TextView tvNombre, tvDireccion, tvHorario, tvPlatoDestacado, tvValoracion;
     private ImageView imgRestaurante;
-    private Button btnFavorito, btnEnviarValoracion;
+    private Button btnFavorito, btnEnviarValoracion, btnRuta, btnCompartir;
     private RatingBar ratingBar;
     private EditText etComentario;
     private RecyclerView rvValoraciones;
@@ -41,7 +46,8 @@ public class DetalleRestauranteActivity extends AppCompatActivity implements OnM
     private GoogleMap mMap;
     private ValoracionAdapter valoracionAdapter;
     private List<Valoracion> listaValoraciones = new ArrayList<>();
-
+    private String valoracionIdActual;
+    private boolean modoEdicion = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,23 +66,97 @@ public class DetalleRestauranteActivity extends AppCompatActivity implements OnM
         ratingBar = findViewById(R.id.ratingBar);
         etComentario = findViewById(R.id.etComentario);
         rvValoraciones = findViewById(R.id.rvValoraciones);
+        btnRuta = findViewById(R.id.btnRuta);
+        btnCompartir = findViewById(R.id.btnCompartir);
 
         repository = FirebaseRepository.getInstance();
         restauranteId = getIntent().getStringExtra("restaurante_id");
+        modoEdicion = getIntent().getBooleanExtra("modo_edicion", false);
+
+        btnRuta.setOnClickListener(v -> abrirRutaEnGoogleMaps());
+        btnCompartir.setOnClickListener(v -> compartirRestaurante());
 
         // Configurar RecyclerView de valoraciones
         rvValoraciones.setLayoutManager(new LinearLayoutManager(this));
         valoracionAdapter = new ValoracionAdapter(listaValoraciones);
         rvValoraciones.setAdapter(valoracionAdapter);
 
-        // ========== SI ES INVITADO: OCULTAR FORMULARIO Y MOSTRAR BOTÓN ==========
-        if (!repository.isUserLoggedIn()) {
-            // Ocultar el formulario de valoración
+        // ========== MODO EDICIÓN ==========
+        // ========== FORMULARIO DE VALORACIÓN ==========
+        if (modoEdicion) {
+            // MODO EDICIÓN - Mostrar formulario para editar
+            ratingBar.setVisibility(View.VISIBLE);
+            etComentario.setVisibility(View.VISIBLE);
+            btnEnviarValoracion.setVisibility(View.VISIBLE);
+
+            // Cargar la valoración existente
+            repository.getUserValoracion(restauranteId, task -> {
+                if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                    DocumentSnapshot doc = task.getResult().getDocuments().get(0);
+                    valoracionIdActual = doc.getId();
+                    int puntuacion = doc.getLong("puntuacion").intValue();
+                    String comentario = doc.getString("comentario");
+                    ratingBar.setRating(puntuacion);
+                    etComentario.setText(comentario);
+                    btnEnviarValoracion.setText("Guardar cambios");
+
+                    // Configurar botón para guardar
+                    btnEnviarValoracion.setOnClickListener(v -> guardarCambios());
+                }
+            });
+        } else if (repository.isUserLoggedIn()) {
+            // MODO NORMAL - Usuario logueado
+            // Verificar si el usuario ya tiene valoración
+            repository.getUserValoracion(restauranteId, task -> {
+                if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                    // YA VALORÓ - Ocultar formulario
+                    ratingBar.setVisibility(View.GONE);
+                    etComentario.setVisibility(View.GONE);
+                    btnEnviarValoracion.setVisibility(View.GONE);
+
+                    DocumentSnapshot doc = task.getResult().getDocuments().get(0);
+                    valoracionIdActual = doc.getId();
+                } else {
+                    // NO HA VALORADO - Mostrar formulario
+                    ratingBar.setVisibility(View.VISIBLE);
+                    etComentario.setVisibility(View.VISIBLE);
+                    btnEnviarValoracion.setVisibility(View.VISIBLE);
+
+                    ratingBar.setRating(0);
+                    etComentario.setText("");
+                    btnEnviarValoracion.setText("Enviar valoración");
+                    valoracionIdActual = null;
+
+                    btnEnviarValoracion.setOnClickListener(v -> {
+                        int puntuacion = (int) ratingBar.getRating();
+                        String comentario = etComentario.getText().toString().trim();
+
+                        if (puntuacion == 0) {
+                            Toast.makeText(this, "Selecciona una puntuación", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        if (comentario.isEmpty()) {
+                            Toast.makeText(this, "Escribe un comentario", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        repository.addValoracion(restauranteId, puntuacion, comentario, taskAdd -> {
+                            Toast.makeText(this, "Valoración enviada", Toast.LENGTH_SHORT).show();
+                            ratingBar.setVisibility(View.GONE);
+                            etComentario.setVisibility(View.GONE);
+                            btnEnviarValoracion.setVisibility(View.GONE);
+                            cargarValoraciones();
+                        });
+                    });
+                }
+            });
+        } else {
+            // INVITADO - Ocultar formulario y mostrar botón registrarse
             ratingBar.setVisibility(View.GONE);
             etComentario.setVisibility(View.GONE);
             btnEnviarValoracion.setVisibility(View.GONE);
 
-            // Crear un botón para registrarse
             Button btnRegistrate = new Button(this);
             btnRegistrate.setText("📝 Regístrate para dejar tu valoración");
             btnRegistrate.setBackgroundColor(getResources().getColor(android.R.color.holo_orange_dark));
@@ -85,12 +165,10 @@ public class DetalleRestauranteActivity extends AppCompatActivity implements OnM
                 startActivity(intent);
             });
 
-            // Agregar el botón donde estaba el RatingBar
             ViewGroup parent = (ViewGroup) ratingBar.getParent();
             int index = parent.indexOfChild(ratingBar);
             parent.addView(btnRegistrate, index);
 
-            // Agregar un margen al botón
             ViewGroup.LayoutParams params = btnRegistrate.getLayoutParams();
             if (params instanceof ViewGroup.MarginLayoutParams) {
                 ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) params;
@@ -120,7 +198,7 @@ public class DetalleRestauranteActivity extends AppCompatActivity implements OnM
                     });
                 }
             } else {
-                new androidx.appcompat.app.AlertDialog.Builder(this)
+                new AlertDialog.Builder(this)
                         .setTitle("Regístrate")
                         .setMessage("Regístrate o inicia sesión para guardar restaurantes en favoritos")
                         .setPositiveButton("Registrarse", (dialog, which) -> {
@@ -130,43 +208,51 @@ public class DetalleRestauranteActivity extends AppCompatActivity implements OnM
                         .show();
             }
         });
+    }
 
-        // ========== BOTÓN ENVIAR VALORACIÓN ==========
-        btnEnviarValoracion.setOnClickListener(v -> {
-            if (repository.isUserLoggedIn()) {
-                int puntuacion = (int) ratingBar.getRating();
-                String comentario = etComentario.getText().toString().trim();
-
-                if (puntuacion == 0) {
-                    Toast.makeText(this, "Selecciona una puntuación", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (comentario.isEmpty()) {
-                    Toast.makeText(this, "Escribe un comentario", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                repository.addValoracion(restauranteId, puntuacion, comentario, task -> {
-                    Toast.makeText(this, "Valoración enviada", Toast.LENGTH_SHORT).show();
-                    ratingBar.setRating(0);
-                    etComentario.setText("");
-                    cargarValoraciones();
-                });
-            } else {
-                // INVITADO: Mostrar diálogo y redirigir al registro
-                new androidx.appcompat.app.AlertDialog.Builder(this)
-                        .setTitle("Inicia sesión")
-                        .setMessage("Para dejar una valoración necesitas registrarte o iniciar sesión. ¿Quieres hacerlo ahora?")
-                        .setPositiveButton("Registrarse", (dialog, which) -> {
-                            Intent intent = new Intent(DetalleRestauranteActivity.this, RegistroActivity.class);
-                            startActivity(intent);
-                        })
-                        .setNegativeButton("Cancelar", null)
-                        .show();
+    private void cargarMiValoracion() {
+        repository.getUserValoracion(restauranteId, task -> {
+            if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                DocumentSnapshot doc = task.getResult().getDocuments().get(0);
+                valoracionIdActual = doc.getId();
+                int puntuacion = doc.getLong("puntuacion").intValue();
+                String comentario = doc.getString("comentario");
+                ratingBar.setRating(puntuacion);
+                etComentario.setText(comentario);
+                btnEnviarValoracion.setText("Guardar cambios");
             }
         });
     }
+
+    private void guardarCambios() {
+        int puntuacion = (int) ratingBar.getRating();
+        String comentario = etComentario.getText().toString().trim();
+
+        if (puntuacion == 0) {
+            Toast.makeText(this, "Selecciona una puntuación", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (comentario.isEmpty()) {
+            Toast.makeText(this, "Escribe un comentario", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        repository.updateValoracion(valoracionIdActual, puntuacion, comentario, task -> {
+            Toast.makeText(this, "Valoración actualizada", Toast.LENGTH_SHORT).show();
+            finish();
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Recargar valoraciones al volver de la edición
+        if (restauranteId != null) {
+            cargarValoraciones();
+        }
+    }
+
     private void cargarRestaurante() {
         repository.getRestauranteById(restauranteId, (documentSnapshot, error) -> {
             if (error != null || documentSnapshot == null || !documentSnapshot.exists()) {
@@ -195,12 +281,16 @@ public class DetalleRestauranteActivity extends AppCompatActivity implements OnM
 
         tvValoracion.setText("⭐ " + restaurante.getValoracionMedia() + " / 5");
 
+        // ========== IMAGEN ==========
         if (restaurante.getFotoUrl() != null && !restaurante.getFotoUrl().isEmpty()) {
-            Picasso.get()
+            Glide.with(this)
                     .load(restaurante.getFotoUrl())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(android.R.drawable.ic_menu_gallery)
                     .error(android.R.drawable.ic_menu_gallery)
                     .into(imgRestaurante);
+        } else {
+            imgRestaurante.setImageResource(android.R.drawable.ic_menu_gallery);
         }
 
         if (repository.isUserLoggedIn() && repository.isFavorite(restauranteId)) {
@@ -215,52 +305,130 @@ public class DetalleRestauranteActivity extends AppCompatActivity implements OnM
             mapFragment.getMapAsync(this);
         }
     }
-
-    private void cargarValoraciones() {
-        android.util.Log.d("VALORACIONES", "=== CARGANDO VALORACIONES ===");
-        android.util.Log.d("VALORACIONES", "Buscando para restauranteId: '" + restauranteId + "'");
-
-        if (restauranteId == null) {
-            android.util.Log.d("VALORACIONES", "ERROR: restauranteId es null");
+    private void abrirRutaEnGoogleMaps() {
+        if (restaurante == null || restaurante.getUbicacion() == null) {
+            Toast.makeText(this, "No hay ubicación disponible", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        double lat = restaurante.getUbicacion().getLatitude();
+        double lng = restaurante.getUbicacion().getLongitude();
+        String nombre = restaurante.getNombre();
+
+        // Construir URI para abrir Google Maps con ruta
+        Uri uri = Uri.parse("google.navigation:q=" + lat + "," + lng + "&mode=d");
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        intent.setPackage("com.google.android.apps.maps");
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            // Si no tiene Google Maps, abrir en navegador
+            Uri webUri = Uri.parse("https://maps.google.com/maps?q=" + lat + "," + lng);
+            Intent webIntent = new Intent(Intent.ACTION_VIEW, webUri);
+            startActivity(webIntent);
+        }
+    }
+    private void compartirRestaurante() {
+        if (restaurante == null) return;
+
+        String mensaje = "🍽️ " + restaurante.getNombre() + "\n" +
+                "📍 " + restaurante.getDireccion() + "\n";
+
+        if (restaurante.getUbicacion() != null) {
+            double lat = restaurante.getUbicacion().getLatitude();
+            double lng = restaurante.getUbicacion().getLongitude();
+            mensaje += "🗺️ https://maps.google.com/?q=" + lat + "," + lng + "\n";
+        }
+
+        mensaje += "\n📱 Descubre más restaurantes en Sabores Zaragoza";
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, mensaje);
+        startActivity(Intent.createChooser(intent, "Compartir restaurante"));
+    }
+
+    private void cargarValoraciones() {
         repository.getValoracionesByRestaurante(restauranteId, (value, error) -> {
-            if (error != null) {
-                android.util.Log.d("VALORACIONES", "Error: " + error.getMessage());
-                return;
-            }
-
-            if (value == null) {
-                android.util.Log.d("VALORACIONES", "value es null");
-                return;
-            }
-
-            android.util.Log.d("VALORACIONES", "Documentos encontrados en Firestore: " + value.size());
-
-            // Mostrar cada valoración encontrada
-            for (DocumentSnapshot doc : value.getDocuments()) {
-                android.util.Log.d("VALORACIONES", "--- Documento ---");
-                android.util.Log.d("VALORACIONES", "ID: " + doc.getId());
-                android.util.Log.d("VALORACIONES", "restauranteId: '" + doc.getString("restauranteId") + "'");
-                android.util.Log.d("VALORACIONES", "comentario: " + doc.getString("comentario"));
-                android.util.Log.d("VALORACIONES", "puntuacion: " + doc.getLong("puntuacion"));
-                android.util.Log.d("VALORACIONES", "nombreUsuario: " + doc.getString("nombreUsuario"));
-            }
+            if (error != null) return;
+            if (value == null) return;
 
             listaValoraciones.clear();
             for (QueryDocumentSnapshot doc : value) {
                 Valoracion v = doc.toObject(Valoracion.class);
                 if (v != null) {
-
+                    v.setId(doc.getId());
                     listaValoraciones.add(v);
                 }
             }
-
-            android.util.Log.d("VALORACIONES", "Total valoraciones cargadas en lista: " + listaValoraciones.size());
             valoracionAdapter.updateList(listaValoraciones);
+
+            if (valoracionAdapter != null) {
+                valoracionAdapter.updateUsuarioId();
+            }
+
+            // Si no hay valoraciones y estamos en modo normal (no edición), limpiar el formulario
+            if (!modoEdicion && listaValoraciones.isEmpty()) {
+                // Verificar si el usuario actual tiene valoración
+                boolean tieneMiValoracion = false;
+                String userId = repository.getCurrentUserId();
+                for (Valoracion v : listaValoraciones) {
+                    if (v.getUsuarioId().equals(userId)) {
+                        tieneMiValoracion = true;
+                        break;
+                    }
+                }
+
+                if (!tieneMiValoracion && btnEnviarValoracion != null) {
+                    btnEnviarValoracion.setText("Enviar valoración");
+                    ratingBar.setRating(0);
+                    etComentario.setText("");
+                    valoracionIdActual = null;
+                }
+            }
         });
     }
+
+    public void onValoracionEliminada() {
+        // Resetear el ID
+        valoracionIdActual = null;
+
+        // Mostrar formulario para nueva valoración
+        ratingBar.setVisibility(View.VISIBLE);
+        etComentario.setVisibility(View.VISIBLE);
+        btnEnviarValoracion.setVisibility(View.VISIBLE);
+        ratingBar.setRating(0);
+        etComentario.setText("");
+        btnEnviarValoracion.setText("Enviar valoración");
+
+        // Configurar botón para enviar
+        btnEnviarValoracion.setOnClickListener(v -> {
+            int puntuacion = (int) ratingBar.getRating();
+            String comentario = etComentario.getText().toString().trim();
+
+            if (puntuacion == 0) {
+                Toast.makeText(this, "Selecciona una puntuación", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (comentario.isEmpty()) {
+                Toast.makeText(this, "Escribe un comentario", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            repository.addValoracion(restauranteId, puntuacion, comentario, task -> {
+                Toast.makeText(this, "Valoración enviada", Toast.LENGTH_SHORT).show();
+                ratingBar.setVisibility(View.GONE);
+                etComentario.setVisibility(View.GONE);
+                btnEnviarValoracion.setVisibility(View.GONE);
+                // Recargar valoraciones para que aparezca la nueva tarjeta
+                cargarValoraciones();
+            });
+        });
+    }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -272,12 +440,17 @@ public class DetalleRestauranteActivity extends AppCompatActivity implements OnM
                     restaurante.getUbicacion().getLongitude()
             );
 
+            // ✅ AÑADIR .anchor(0.5f, 1.0f) para que la punta toque el suelo
             mMap.addMarker(new MarkerOptions()
+                    .anchor(0.5f, 1.0f)  // ← ESTO ES CLAVE
                     .position(ubicacion)
                     .title(restaurante.getNombre())
                     .snippet(restaurante.getDireccion()));
 
-            mMap.moveCamera(com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom(ubicacion, 15));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 15f));
+        } else {
+            LatLng zaragoza = new LatLng(41.6569, -0.8783);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(zaragoza, 12f));
         }
     }
 }

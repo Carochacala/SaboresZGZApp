@@ -23,6 +23,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import android.widget.EditText;
+import androidx.appcompat.app.AlertDialog;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -124,8 +126,36 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Recuperar contraseña
+        TextView tvOlvidoPass = findViewById(R.id.tvOlvidoPass);
+        tvOlvidoPass.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Recuperar contraseña");
+            builder.setMessage("Ingresa tu correo electrónico");
 
+            final EditText input = new EditText(this);
+            input.setHint("correo@ejemplo.com");
+            builder.setView(input);
 
+            builder.setPositiveButton("Enviar", (dialog, which) -> {
+                String email = input.getText().toString().trim();
+                if (email.isEmpty()) {
+                    Toast.makeText(this, "Ingresa un correo válido", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                auth.sendPasswordResetEmail(email)
+                        .addOnSuccessListener(aVoid -> {
+                            Toast.makeText(this, "Revisa tu correo para restablecer tu contraseña", Toast.LENGTH_LONG).show();
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        });
+            });
+
+            builder.setNegativeButton("Cancelar", null);
+            builder.show();
+        });
 
 
     }

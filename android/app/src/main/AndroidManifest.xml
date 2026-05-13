@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Sabores_ZGZ">
         <activity
+            android:name=".FavoritosActivity"
+            android:exported="false" />
+        <activity
             android:name=".MapaActivity"
             android:exported="false" />
 

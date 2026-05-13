@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Sección Principal -->
+    <item
+        android:id="@+id/nav_inicio"
+        android:icon="@android:drawable/ic_dialog_info"
+        android:title="Inicio" />
+
+    <item
+        android:id="@+id/nav_tipos_comida"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="Tipos de Comida" />
+
+    <!-- Sección Mis Cosas -->
+    <item android:title="MIS COSAS">
+        <menu>
+            <item
+                android:id="@+id/nav_favoritos"
+                android:icon="@android:drawable/ic_menu_save"
+                android:title="Mis Favoritos" />
+
+            <item
+                android:id="@+id/nav_mis_valoraciones"
+                android:icon="@android:drawable/ic_menu_edit"
+                android:title="Mis Valoraciones" />
+        </menu>
+    </item>
+
+    <!-- Sección Explorar -->
+    <item android:title="EXPLORAR">
+        <menu>
+            <item
+                android:id="@+id/nav_mapa"
+                android:icon="@android:drawable/ic_menu_mapmode"
+                android:title="Ver en Mapa" />
+
+            <item
+                android:id="@+id/nav_cerca_de_mi"
+                android:icon="@android:drawable/ic_menu_myplaces"
+                android:title="Cerca de mí" />
+        </menu>
+    </item>
+
+    <!-- Sección Cuenta -->
+    <item android:title="CUENTA">
+        <menu>
+            <item
+                android:id="@+id/nav_perfil"
+                android:icon="@android:drawable/ic_menu_edit"
+                android:title="Mi Perfil" />
+
+            <item
+                android:id="@+id/nav_configuracion"
+                android:icon="@android:drawable/ic_menu_preferences"
+                android:title="Configuración" />
+        </menu>
+    </item>
+
+    <!-- Sección Información -->
+    <item
+        android:id="@+id/nav_about"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:title="Acerca de" />
+
+    <item
+        android:id="@+id/nav_logout"
+        android:icon="@android:drawable/ic_lock_lock"
+        android:title="Cerrar Sesión" />
+
+</menu>
