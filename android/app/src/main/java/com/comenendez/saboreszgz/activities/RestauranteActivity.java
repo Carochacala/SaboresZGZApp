@@ -1,13 +1,19 @@
-package com.comenendez.saboreszgz;
+package com.comenendez.saboreszgz.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.comenendez.saboreszgz.R;
+import com.comenendez.saboreszgz.adapters.RestauranteAdapter;
+import com.google.android.material.navigation.NavigationView;
+import com.comenendez.saboreszgz.helpers.MenuHelper;
 import com.comenendez.saboreszgz.data.FirebaseRepository;
 import com.comenendez.saboreszgz.model.Restaurante;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -23,21 +29,31 @@ public class RestauranteActivity extends AppCompatActivity {
     private FirebaseRepository repository;
     private String tipoCocina;
 
+    // Menú
+    private DrawerLayout drawerLayout;
+    private Toolbar toolbar;
+    private NavigationView navigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurante);
 
-// Botón para abrir el mapa
+        // ========== CONFIGURAR MENÚ ==========
+        drawerLayout = findViewById(R.id.drawer_layout);
+        toolbar = findViewById(R.id.toolbar);
+        navigationView = findViewById(R.id.nav_view);
+        MenuHelper.setupMenu(this, drawerLayout, toolbar, navigationView);
+        // ====================================
+
+        // Botón para abrir el mapa
         Button btnMapa = findViewById(R.id.btnMapa);
 
         rvRestaurantes = findViewById(R.id.rvRestaurantes);
         tvTitulo = findViewById(R.id.tvTitulo);
 
-        // Recibir el dato del Intent
         tipoCocina = getIntent().getStringExtra("tipo_cocina");
 
-        // Log para depurar
         android.util.Log.d("PRUEBA", "tipo_cocina recibido: " + tipoCocina);
 
         if (tipoCocina == null) {
@@ -50,7 +66,7 @@ public class RestauranteActivity extends AppCompatActivity {
 
         adapter = new RestauranteAdapter(restaurantes, restaurante -> {
             Intent intent = new Intent(RestauranteActivity.this, DetalleRestauranteActivity.class);
-            intent.putExtra("restaurante_id", restaurante.getId());  // ✅ Enviamos solo el ID
+            intent.putExtra("restaurante_id", restaurante.getId());
             startActivity(intent);
         });
 
@@ -88,5 +104,10 @@ public class RestauranteActivity extends AppCompatActivity {
             }
             adapter.updateList(restaurantes);
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        MenuHelper.handleBackPressed(this, drawerLayout);
     }
 }

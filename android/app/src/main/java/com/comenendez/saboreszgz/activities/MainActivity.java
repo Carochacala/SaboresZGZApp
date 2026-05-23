@@ -1,11 +1,10 @@
-package com.comenendez.saboreszgz;
+package com.comenendez.saboreszgz.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +12,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.comenendez.saboreszgz.R;
 import com.comenendez.saboreszgz.data.FirebaseRepository;
+import com.comenendez.saboreszgz.helpers.ToastHelper;
+import com.comenendez.saboreszgz.helpers.ValidacionHelper;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -23,7 +25,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
-import android.widget.EditText;
+
 import androidx.appcompat.app.AlertDialog;
 
 
@@ -80,8 +82,13 @@ public class MainActivity extends AppCompatActivity {
             String email = etCorreo.getText().toString();
             String pass = etPassword.getText().toString();
 
-            if (email.isEmpty() || pass.isEmpty()) {
-                Toast.makeText(this, "Rellena todos los campos", Toast.LENGTH_SHORT).show();
+            if (ValidacionHelper.isCampoVacio(email) || ValidacionHelper.isCampoVacio(pass)) {
+                ToastHelper.mostrarError(this, "Rellena todos los campos");
+                return;
+            }
+
+            if (!ValidacionHelper.isEmailValido(email)) {
+                ToastHelper.mostrarError(this, "Email no válido");
                 return;
             }
 
@@ -91,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                         finish();
                     })
                     .addOnFailureListener(e -> {
-                        Toast.makeText(this, "Error al iniciar sesión", Toast.LENGTH_SHORT).show();
+                        ToastHelper.mostrarError(this, "Error al iniciar sesión");
                     });
         });
 
@@ -140,16 +147,16 @@ public class MainActivity extends AppCompatActivity {
             builder.setPositiveButton("Enviar", (dialog, which) -> {
                 String email = input.getText().toString().trim();
                 if (email.isEmpty()) {
-                    Toast.makeText(this, "Ingresa un correo válido", Toast.LENGTH_SHORT).show();
+                    ToastHelper.mostrarError(this, "Ingresa un correo válido");
                     return;
                 }
 
                 auth.sendPasswordResetEmail(email)
                         .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(this, "Revisa tu correo para restablecer tu contraseña", Toast.LENGTH_LONG).show();
+                            ToastHelper.mostrarError(this, "Revisa tu correo para reestablecer tu contraseña");
                         })
                         .addOnFailureListener(e -> {
-                            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            ToastHelper.mostrarError(this, "Error: " + e.getMessage());
                         });
             });
 
@@ -179,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
                 // Google Sign-In falló
-                Toast.makeText(this, "Error al iniciar con Google: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                ToastHelper.mostrarError(this, "Error al iniciar con google: " + e.getMessage());
             }
         }
     }
@@ -195,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
                         finish();
                     } else {
                         // Login falló
-                        Toast.makeText(MainActivity.this, "Error de autenticación", Toast.LENGTH_SHORT).show();
+                        ToastHelper.mostrarError(this, "Error de autenticación");
                     }
                 });
     }

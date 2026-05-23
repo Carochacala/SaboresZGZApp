@@ -16,10 +16,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Sabores_ZGZ">
         <activity
-            android:name=".FavoritosActivity"
+            android:name=".activities.ManualActivity"
             android:exported="false" />
         <activity
-            android:name=".MapaActivity"
+            android:name=".activities.RuletaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.FavoritosActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:screenOrientation="fullUser" />
+        <activity
+            android:name=".activities.MapaActivity"
             android:exported="false" />
 
         <meta-data
@@ -27,37 +35,37 @@
             android:value="AIzaSyCiOZSH5xqPVU8BkYSvcHT6Z6wGcGZdijU" />
 
         <activity
-            android:name=".DetalleRestauranteActivity"
-            android:exported="false" />
+            android:name=".activities.DetalleRestauranteActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:screenOrientation="fullUser" />
         <activity
-            android:name=".RegistroActivity"
-            android:exported="false" />
+            android:name=".activities.RegistroActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:screenOrientation="fullUser" />
         <activity
-            android:name=".HomeActivity"
-            android:exported="false" /> <!-- Pantalla de selección de tipo de comida -->
+            android:name=".activities.HomeActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:screenOrientation="fullUser" /> <!-- Pantalla de selección de tipo de comida -->
         <activity
-            android:name=".TiposComidaActivity"
-            android:exported="false" /> <!-- Pantalla de restaurantes -->
+            android:name=".activities.TiposComidaActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:screenOrientation="fullUser" /> <!-- Pantalla de restaurantes -->
         <activity
-            android:name=".RestauranteActivity"
-            android:exported="false" /> <!-- MainActivity, punto de entrada -->
+            android:name=".activities.RestauranteActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:screenOrientation="fullUser" /> <!-- MainActivity, punto de entrada -->
+
         <activity
-            android:name=".DetallePais"
-            android:exported="false" />
+            android:name=".activities.MisValoracionesActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="fullUser" />
         <activity
-            android:name=".DetallePlato"
-            android:exported="false" />
-        <activity
-            android:name=".DetalleRestaurante"
-            android:exported="false" />
-        <activity
-            android:name=".SeleccionRestaurantes"
-            android:exported="false" />
-        <activity
-            android:name=".SeleccionPais"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

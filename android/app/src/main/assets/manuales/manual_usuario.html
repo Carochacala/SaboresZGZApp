@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Manual de Usuario - Sabores Zaragoza</title>
+    <style>
+        /* ===== RESET Y VARIABLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #FF5722;
+            --color-primary-dark: #E64A19;
+            --color-success: #4CAF50;
+            --color-warning: #FF9800;
+            --color-danger: #F44336;
+            --color-text: #333;
+            --color-text-light: #666;
+            --color-bg: #f5f5f5;
+            --color-white: #fff;
+            --border-radius: 12px;
+            --shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            padding: 16px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--color-white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: clamp(20px, 5vw, 40px);
+        }
+
+        /* ===== TIPOGRAFÍA ===== */
+        h1 {
+            color: var(--color-primary);
+            border-bottom: 3px solid var(--color-primary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: clamp(24px, 6vw, 32px);
+        }
+
+        h2 {
+            color: var(--color-primary);
+            margin-top: 32px;
+            margin-bottom: 16px;
+            font-size: clamp(20px, 5vw, 24px);
+            background: #FFF3E0;
+            padding: 10px 16px;
+            border-radius: 8px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: clamp(16px, 4vw, 18px);
+        }
+
+        /* ===== COMPONENTES ===== */
+        .indice {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+        }
+
+        .indice ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .indice li {
+            margin: 8px 0;
+        }
+
+        .indice a {
+            color: var(--color-primary);
+            text-decoration: none;
+        }
+
+        .indice a:hover {
+            text-decoration: underline;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+        /* ===== UTILIDADES ===== */
+        .paso, .nota, .warning {
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 8px;
+        }
+
+        .paso {
+            background: #E8F5E9;
+            border-left: 4px solid var(--color-success);
+        }
+
+        .nota {
+            background: #FFF3E0;
+            border-left: 4px solid var(--color-warning);
+        }
+
+        .warning {
+            background: #FFEBEE;
+            border-left: 4px solid var(--color-danger);
+        }
+
+        /* ===== LISTAS ===== */
+        ul, ol {
+            padding-left: 24px;
+            margin: 12px 0;
+        }
+
+        li {
+            margin: 6px 0;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* ===== VERSIÓN IMPRESIÓN ===== */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                padding: 20px;
+                max-width: 100%;
+            }
+
+            .paso, .nota, .warning {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            h2 {
+                break-after: avoid;
+            }
+
+            .indice {
+                background: #f0f0f0;
+                break-inside: avoid;
+            }
+        }
+
+        /* ===== MÓVIL ===== */
+        @media (max-width: 600px) {
+            body {
+                padding: 8px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 6px;
+            }
+        }
+
+        /* ===== TABLA EN MÓVIL ===== */
+        @media (max-width: 480px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+
+            thead {
+                display: none;
+            }
+
+            tr {
+                margin-bottom: 16px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                padding: 8px;
+            }
+
+            td {
+                display: flex;
+                justify-content: space-between;
+                padding: 8px;
+                border: none;
+                border-bottom: 1px solid #eee;
+            }
+
+            td:last-child {
+                border-bottom: none;
+            }
+
+            td:before {
+                content: attr(data-label);
+                font-weight: bold;
+                width: 40%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📱 SABORES ZARAGOZA</h1>
+    <h2>Manual de Usuario</h2>
+    <p>Versión 1.0 | Mayo 2026</p>
+
+    <!-- ÍNDICE -->
+    <div class="indice">
+        <h3>📋 Contenido</h3>
+        <ul>
+            <li><a href="#registro">1. Registro y acceso</a></li>
+            <li><a href="#principal">2. Pantalla principal</a></li>
+            <li><a href="#menu">3. Menú lateral</a></li>
+            <li><a href="#explorar">4. Explorar restaurantes</a></li>
+            <li><a href="#detalle">5. Ficha del restaurante</a></li>
+            <li><a href="#favoritos">6. Gestión de favoritos</a></li>
+            <li><a href="#valoraciones">7. Valoraciones</a></li>
+            <li><a href="#preguntas">8. Preguntas frecuentes</a></li>
+        </ul>
+    </div>
+
+    <!-- 1. REGISTRO Y ACCESO -->
+    <h2 id="registro">1. REGISTRO Y ACCESO</h2>
+
+    <h3>🔐 Registro de nuevo usuario</h3>
+    <div class="paso">
+        <strong>Paso 1:</strong> Abre la aplicación y pulsa "Regístrate".<br>
+        <strong>Paso 2:</strong> Introduce tu nombre, email y contraseña.<br>
+        <strong>Paso 3:</strong> Pulsa "Registrar".<br>
+        <strong>Paso 4:</strong> Accederás automáticamente a la pantalla principal.
+    </div>
+
+    <h3>🔑 Inicio de sesión</h3>
+    <div class="paso">
+        <strong>Paso 1:</strong> Introduce tu email y contraseña.<br>
+        <strong>Paso 2:</strong> Pulsa "Iniciar Sesión".<br>
+        <strong>Paso 3:</strong> Serás redirigido a la pantalla principal.
+    </div>
+
+    <h3>📱 Inicio con Google</h3>
+    <div class="paso">
+        <strong>Paso 1:</strong> Pulsa "Continuar con Google".<br>
+        <strong>Paso 2:</strong> Selecciona tu cuenta de Google.<br>
+        <strong>Paso 3:</strong> Espera a que se complete la autenticación.
+    </div>
+
+    <h3>👤 Modo invitado</h3>
+    <div class="paso">
+        <strong>Paso 1:</strong> Pulsa "Continuar como invitado".<br>
+        <strong>Nota:</strong> En modo invitado no podrás guardar favoritos ni dejar valoraciones.
+    </div>
+
+    <h3>🔓 Recuperación de contraseña</h3>
+    <div class="paso">
+        <strong>Paso 1:</strong> En la pantalla de login, pulsa "¿Olvidaste tu contraseña?".<br>
+        <strong>Paso 2:</strong> Introduce tu email.<br>
+        <strong>Paso 3:</strong> Recibirás un enlace para crear una nueva contraseña.
+    </div>
+
+    <!-- 2. PANTALLA PRINCIPAL -->
+    <h2 id="principal">2. PANTALLA PRINCIPAL</h2>
+
+    <div style="overflow-x: auto;">
+        <table>
+            <thead>
+            <tr><th>Elemento</th><th>Función</th></tr>
+            </thead>
+            <tbody>
+            <tr><td data-label="Elemento">☰ (tres líneas)</td><td data-label="Función">Abre el menú lateral</td></tr>
+            <tr><td data-label="Elemento">Mensaje de bienvenida</td><td data-label="Función">Muestra tu nombre o "Modo invitado"</td></tr>
+            <tr><td data-label="Elemento">Botón "ENTRAR"</td><td data-label="Función">Ir a la selección de países</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 3. MENÚ LATERAL -->
+    <h2 id="menu">3. MENÚ LATERAL</h2>
+    <p>Desliza desde el borde izquierdo o pulsa el icono ☰.</p>
+
+    <div style="overflow-x: auto;">
+        <table>
+            <thead>
+            <tr><th>Opción</th><th>Función</th></tr>
+            </thead>
+            <tbody>
+            <tr><td data-label="Opción">Inicio</td><td data-label="Función">Volver a la pantalla principal</td></tr>
+            <tr><td data-label="Opción">Tipos de Comida</td><td data-label="Función">Ver países con restaurantes</td></tr>
+            <tr><td data-label="Opción">Mis Favoritos</td><td data-label="Función">Ver restaurantes guardados (solo registrados)</td></tr>
+            <tr><td data-label="Opción">Ver en Mapa</td><td data-label="Función">Mostrar todos los restaurantes en el mapa</td></tr>
+            <tr><td data-label="Opción">Acerca de</td><td data-label="Función">Información de la app</td></tr>
+            <tr><td data-label="Opción">Cerrar Sesión</td><td data-label="Función">Salir de la cuenta (solo registrados)</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 4. EXPLORAR RESTAURANTES -->
+    <h2 id="explorar">4. EXPLORAR RESTAURANTES</h2>
+    <div class="paso">
+        <strong>Paso 1:</strong> Pulsa "ENTRAR" en la pantalla principal.<br>
+        <strong>Paso 2:</strong> Selecciona un país (ej: Japón, México, Italia).<br>
+        <strong>Paso 3:</strong> Se mostrará la lista de restaurantes de ese país.<br>
+        <strong>Paso 4:</strong> Pulsa cualquier restaurante para ver su ficha completa.
+    </div>
+
+    <!-- 5. FICHA DEL RESTAURANTE -->
+    <h2 id="detalle">5. FICHA DEL RESTAURANTE</h2>
+
+    <h3>Información disponible:</h3>
+    <ul>
+        <li>📸 Fotografía del establecimiento</li>
+        <li>📛 Nombre del restaurante</li>
+        <li>📍 Dirección completa</li>
+        <li>🕐 Horario de apertura</li>
+        <li>🍽️ Plato destacado</li>
+        <li>⭐ Valoración media</li>
+    </ul>
+
+    <h3>Acciones disponibles:</h3>
+    <ul>
+        <li>⭐ Guardar en favoritos</li>
+        <li>🗺️ Abrir ruta en Google Maps</li>
+        <li>📤 Compartir por WhatsApp u otras apps</li>
+    </ul>
+
+    <!-- 6. FAVORITOS -->
+    <h2 id="favoritos">6. GESTIÓN DE FAVORITOS</h2>
+    <div class="nota">
+        ⚠️ Esta funcionalidad solo está disponible para usuarios registrados.
+    </div>
+
+    <h3>⭐ Añadir a favoritos</h3>
+    <div class="paso">Abre la ficha del restaurante y pulsa "Guardar en favoritos".</div>
+
+    <h3>📋 Ver favoritos</h3>
+    <div class="paso">Menú lateral → "Mis Favoritos".</div>
+
+    <h3>❌ Eliminar favoritos</h3>
+    <div class="paso">Abre la ficha del restaurante y pulsa "Eliminar de favoritos".</div>
+
+    <!-- 7. VALORACIONES -->
+    <h2 id="valoraciones">7. VALORACIONES</h2>
+    <div class="nota">
+        ⚠️ Esta funcionalidad solo está disponible para usuarios registrados.
+    </div>
+
+    <h3>✏️ Dejar una valoración</h3>
+    <div class="paso">
+        <strong>Paso 1:</strong> Abre la ficha del restaurante.<br>
+        <strong>Paso 2:</strong> Selecciona una puntuación (1 a 5 estrellas).<br>
+        <strong>Paso 3:</strong> Escribe un comentario.<br>
+        <strong>Paso 4:</strong> Pulsa "Enviar valoración".
+    </div>
+
+    <h3>✏️ Editar mi valoración</h3>
+    <div class="paso">
+        <strong>Paso 1:</strong> Encuentra tu valoración en la lista.<br>
+        <strong>Paso 2:</strong> Pulsa los tres puntos (●●●).<br>
+        <strong>Paso 3:</strong> Selecciona "Editar valoración".<br>
+        <strong>Paso 4:</strong> Modifica y pulsa "Guardar cambios".
+    </div>
+
+    <h3>🗑️ Eliminar mi valoración</h3>
+    <div class="paso">
+        <strong>Paso 1:</strong> Pulsa los tres puntos (●●●) en tu valoración.<br>
+        <strong>Paso 2:</strong> Selecciona "Eliminar valoración".<br>
+        <strong>Paso 3:</strong> Confirma la operación.
+    </div>
+
+    <!-- 8. PREGUNTAS FRECUENTES -->
+    <h2 id="preguntas">8. PREGUNTAS FRECUENTES</h2>
+
+    <div class="paso"><strong>❓ ¿Necesito Internet?</strong><br>Sí, la aplicación requiere conexión a Internet para cargar restaurantes y mapas.</div>
+    <div class="paso"><strong>❓ ¿Puedo usar la app sin registrarme?</strong><br>Sí, mediante el modo invitado (funciones limitadas).</div>
+    <div class="paso"><strong>❓ ¿Cómo recupero mi contraseña?</strong><br>Pulsa "¿Olvidaste tu contraseña?" en la pantalla de login.</div>
+    <div class="paso"><strong>❓ ¿Las valoraciones son anónimas?</strong><br>No, muestran tu nombre de usuario.</div>
+    <div class="paso"><strong>❓ ¿Puedo cambiar mi valoración después?</strong><br>Sí, puedes editarla o eliminarla.</div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <p>Sabores Zaragoza - Versión 1.0</p>
+        <p>© 2026 - Todos los derechos reservados</p>
+        <p>📧 soporte@saboreszgz.com</p>
+    </div>
+</div>
+</body>
+</html>

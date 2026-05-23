@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Manual de Administrador - Sabores Zaragoza</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --color-primary: #FF5722;
+            --color-primary-dark: #E64A19;
+            --color-success: #4CAF50;
+            --color-warning: #FF9800;
+            --color-danger: #F44336;
+            --color-text: #333;
+            --color-bg: #f5f5f5;
+            --color-white: #fff;
+            --border-radius: 12px;
+            --shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            padding: 16px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--color-white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: clamp(20px, 5vw, 40px);
+        }
+        h1 {
+            color: var(--color-primary);
+            border-bottom: 3px solid var(--color-primary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: clamp(24px, 6vw, 32px);
+        }
+        h2 {
+            color: var(--color-primary);
+            margin-top: 32px;
+            margin-bottom: 16px;
+            font-size: clamp(20px, 5vw, 24px);
+            background: #FFF3E0;
+            padding: 10px 16px;
+            border-radius: 8px;
+        }
+        h3 {
+            color: #555;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: clamp(16px, 4vw, 18px);
+        }
+        .indice {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+        }
+        .indice ul { list-style: none; padding-left: 0; }
+        .indice li { margin: 8px 0; }
+        .indice a { color: var(--color-primary); text-decoration: none; }
+        .indice a:hover { text-decoration: underline; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: var(--color-primary); color: white; }
+        .paso, .nota, .warning {
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 8px;
+        }
+        .paso { background: #E8F5E9; border-left: 4px solid var(--color-success); }
+        .nota { background: #FFF3E0; border-left: 4px solid var(--color-warning); }
+        .warning { background: #FFEBEE; border-left: 4px solid var(--color-danger); }
+        .code {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+        .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center; font-size: 12px; color: #999; }
+        @media print {
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; padding: 20px; max-width: 100%; }
+            .code { break-inside: avoid; background: #f0f0f0; color: #000; }
+        }
+        @media (max-width: 600px) {
+            body { padding: 8px; }
+            table { font-size: 12px; }
+            th, td { padding: 6px; }
+        }
+        @media (max-width: 480px) {
+            table, thead, tbody, th, td, tr { display: block; }
+            thead { display: none; }
+            tr { margin-bottom: 16px; border: 1px solid #ddd; border-radius: 8px; padding: 8px; }
+            td { display: flex; justify-content: space-between; padding: 8px; border: none; border-bottom: 1px solid #eee; }
+            td:last-child { border-bottom: none; }
+            td:before { content: attr(data-label); font-weight: bold; width: 40%; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🛠️ SABORES ZARAGOZA</h1>
+    <h2>Manual de Administrador</h2>
+    <p>Versión 1.0 | Mayo 2026</p>
+
+    <div class="indice">
+        <h3>📋 Contenido</h3>
+        <ul>
+            <li><a href="#acceso">1. Acceso al panel de administración</a></li>
+            <li><a href="#restaurantes">2. Gestión de restaurantes</a></li>
+            <li><a href="#imagenes">3. Gestión de imágenes</a></li>
+            <li><a href="#usuarios">4. Gestión de usuarios</a></li>
+            <li><a href="#valoraciones">5. Gestión de valoraciones</a></li>
+            <li><a href="#firebase">6. Acceso a Firebase Console</a></li>
+            <li><a href="#preguntas">7. Preguntas frecuentes</a></li>
+        </ul>
+    </div>
+
+    <h2 id="acceso">1. ACCESO AL PANEL DE ADMINISTRACIÓN</h2>
+    <div class="nota">⚠️ Esta funcionalidad solo está disponible para usuarios con rol "admin".</div>
+    <div class="paso"><strong>Paso 1:</strong> Inicia sesión con una cuenta de administrador.<br><strong>Paso 2:</strong> En el menú lateral, aparecerá la opción "Panel Admin".<br><strong>Paso 3:</strong> Pulsa para acceder.</div>
+
+    <h2 id="restaurantes">2. GESTIÓN DE RESTAURANTES</h2>
+    <h3>➕ Añadir un nuevo restaurante</h3>
+    <div class="paso">
+        <strong>Paso 1:</strong> En el panel admin, pulsa "Añadir restaurante".<br>
+        <strong>Paso 2:</strong> Completa todos los campos obligatorios:<br>
+        • Nombre del restaurante<br>
+        • Dirección completa<br>
+        • Tipo de cocina (país)<br>
+        • Horario<br>
+        • Plato destacado<br>
+        • Coordenadas (latitud, longitud)<br>
+        <strong>Paso 3:</strong> Pulsa "Guardar".
+    </div>
+
+    <h3>✏️ Editar un restaurante</h3>
+    <div class="paso">
+        <strong>Paso 1:</strong> En la lista de restaurantes, busca el deseado.<br>
+        <strong>Paso 2:</strong> Pulsa el icono de editar (✏️).<br>
+        <strong>Paso 3:</strong> Modifica los campos necesarios.<br>
+        <strong>Paso 4:</strong> Pulsa "Guardar cambios".
+    </div>
+
+    <h3>🗑️ Eliminar un restaurante</h3>
+    <div class="paso">
+        <strong>Paso 1:</strong> Busca el restaurante en la lista.<br>
+        <strong>Paso 2:</strong> Pulsa el icono de eliminar (🗑️).<br>
+        <strong>Paso 3:</strong> Confirma la eliminación.
+    </div>
+
+    <h2 id="imagenes">3. GESTIÓN DE IMÁGENES</h2>
+    <h3>🖼️ Subir imagen a Firebase Storage</h3>
+    <div class="paso">
+        <strong>Paso 1:</strong> Accede a Firebase Console.<br>
+        <strong>Paso 2:</strong> Ve a Storage → restaurantes/<br>
+        <strong>Paso 3:</strong> Pulsa "Subir archivo".<br>
+        <strong>Paso 4:</strong> Selecciona la imagen.<br>
+        <strong>Paso 5:</strong> Copia la URL generada.<br>
+        <strong>Paso 6:</strong> Pega la URL en el campo "fotoUrl" del restaurante.
+    </div>
+    <div class="nota">📌 Las imágenes deben tener un tamaño máximo de 500 KB y formato JPG o PNG.</div>
+
+    <h2 id="usuarios">4. GESTIÓN DE USUARIOS</h2>
+    <h3>👥 Ver lista de usuarios</h3>
+    <div class="paso">En el panel admin, accede a "Usuarios" para ver todos los registrados.</div>
+    <h3>⭐ Cambiar rol de usuario</h3>
+    <div class="paso">
+        <strong>Paso 1:</strong> Selecciona un usuario.<br>
+        <strong>Paso 2:</strong> Cambia su rol entre "normal" y "admin".<br>
+        <strong>Paso 3:</strong> Pulsa "Guardar".
+    </div>
+
+    <h2 id="valoraciones">5. GESTIÓN DE VALORACIONES</h2>
+    <h3>🗑️ Eliminar valoraciones inapropiadas</h3>
+    <div class="paso">
+        <strong>Paso 1:</strong> Accede a la lista de valoraciones.<br>
+        <strong>Paso 2:</strong> Busca la valoración problemática.<br>
+        <strong>Paso 3:</strong> Pulsa "Eliminar".
+    </div>
+
+    <h2 id="firebase">6. ACCESO A FIREBASE CONSOLE</h2>
+    <div class="paso">
+        <strong>URL:</strong> <a href="https://console.firebase.google.com">https://console.firebase.google.com</a><br>
+        <strong>Proyecto:</strong> Sabores Zaragoza
+    </div>
+    <h3>Colecciones principales</h3>
+    <table>
+        <thead><tr><th>Colección</th><th>Descripción</th></tr></thead>
+        <tbody>
+        <tr><td data-label="Colección">restaurantes</td><td data-label="Descripción">Datos de los restaurantes</td></tr>
+        <tr><td data-label="Colección">usuarios</td><td data-label="Descripción">Datos de los usuarios</td></tr>
+        <tr><td data-label="Colección">valoraciones</td><td data-label="Descripción">Valoraciones de usuarios</td></tr>
+        </tbody>
+    </table>
+
+    <h2 id="preguntas">7. PREGUNTAS FRECUENTES</h2>
+    <div class="paso"><strong>❓ ¿Cómo hago administrador a un usuario?</strong><br>Desde Firebase Console, edita el campo "tipoUsuario" a "admin".</div>
+    <div class="paso"><strong>❓ ¿Dónde se guardan las imágenes?</strong><br>En Firebase Storage, carpeta "restaurantes".</div>
+    <div class="paso"><strong>❓ ¿Puedo exportar los datos?</strong><br>Sí, desde Firebase Console puedes exportar colecciones en JSON.</div>
+    <div class="paso"><strong>❓ ¿Cómo añadir múltiples restaurantes de golpe?</strong><br>Usa el script Node.js en la carpeta "cargar_restaurantes".</div>
+
+    <div class="footer">
+        <p>Sabores Zaragoza - Versión 1.0</p>
+        <p>© 2026 - Todos los derechos reservados</p>
+        <p>📧 soporte@saboreszgz.com</p>
+    </div>
+</div>
+</body>
+</html>

@@ -252,6 +252,14 @@ public class FirebaseRepository {
                 .addSnapshotListener(listener);
     }
 
+    // Obtener todas las valoraciones de un usuario
+    public void getMisValoraciones(String usuarioId, EventListener<QuerySnapshot> listener) {
+        db.collection(VALORACIONES_COLLECTION)
+                .whereEqualTo("usuarioId", usuarioId)
+                .orderBy("fecha", Query.Direction.DESCENDING)
+                .addSnapshotListener(listener);
+    }
+
     // Verificar si el usuario ya valoró este restaurante
     public void getUserValoracion(String restauranteId, OnCompleteListener<QuerySnapshot> listener) {
         String usuarioId = getCurrentUserId();
@@ -298,24 +306,24 @@ public class FirebaseRepository {
         db.collection(VALORACIONES_COLLECTION)
                 .document(valoracionId)
                 .update(updates)
-                .addOnSuccessListener(aVoid -> {
-                    // Obtener restauranteId para actualizar la media
-                    db.collection(VALORACIONES_COLLECTION)
-                            .document(valoracionId)
-                            .get()
-                            .addOnSuccessListener(doc -> {
-                                String restauranteId = doc.getString("restauranteId");
-                                if (restauranteId != null) {
-                                    actualizarValoracionMedia(restauranteId);
-                                }
-                                if (listener != null) listener.onComplete(null);
-                            })
-                            .addOnFailureListener(e -> {
-                                if (listener != null) listener.onComplete(null);
-                            });
-                })
-                .addOnFailureListener(e -> {
-                    if (listener != null) listener.onComplete(null);
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Obtener restauranteId para actualizar la media
+                        db.collection(VALORACIONES_COLLECTION)
+                                .document(valoracionId)
+                                .get()
+                                .addOnCompleteListener(task2 -> {
+                                    if (task2.isSuccessful() && task2.getResult() != null) {
+                                        String restauranteId = task2.getResult().getString("restauranteId");
+                                        if (restauranteId != null) {
+                                            actualizarValoracionMedia(restauranteId);
+                                        }
+                                    }
+                                    if (listener != null) listener.onComplete(task);
+                                });
+                    } else {
+                        if (listener != null) listener.onComplete(task);
+                    }
                 });
     }
 
@@ -327,31 +335,26 @@ public class FirebaseRepository {
                 .document(valoracionId)
                 .get()
                 .addOnSuccessListener(doc -> {
-                    android.util.Log.d("ELIMINAR", "Documento encontrado: " + doc.exists());
                     String restauranteId = doc.getString("restauranteId");
-                    android.util.Log.d("ELIMINAR", "restauranteId: " + restauranteId);
 
                     db.collection(VALORACIONES_COLLECTION)
                             .document(valoracionId)
                             .delete()
-                            .addOnSuccessListener(aVoid -> {
-                                android.util.Log.d("ELIMINAR", "Documento eliminado correctamente");
-                                if (restauranteId != null) {
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful() && restauranteId != null) {
                                     actualizarValoracionMedia(restauranteId);
                                 }
-                                if (listener != null) listener.onComplete(null);
-                            })
-                            .addOnFailureListener(e -> {
-                                android.util.Log.d("ELIMINAR", "Error al eliminar: " + e.getMessage());
-                                if (listener != null) listener.onComplete(null);
+                                if (listener != null) {
+                                    listener.onComplete(task);
+                                }
                             });
                 })
                 .addOnFailureListener(e -> {
-                    android.util.Log.d("ELIMINAR", "Error al obtener documento: " + e.getMessage());
-                    if (listener != null) listener.onComplete(null);
+                    android.util.Log.d("ELIMINAR", "Error: " + e.getMessage());
+                    if (listener != null) {
+                        listener.onComplete(null);
+                    }
                 });
     }
-
-
 
 }

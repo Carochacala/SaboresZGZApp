@@ -1,4 +1,4 @@
-package com.comenendez.saboreszgz;
+package com.comenendez.saboreszgz.adapters;
 
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.comenendez.saboreszgz.R;
+
 import java.util.List;
 
 public class TipoAdapter extends RecyclerView.Adapter<TipoAdapter.ViewHolder> {

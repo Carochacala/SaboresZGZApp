@@ -1,4 +1,4 @@
-package com.comenendez.saboreszgz;
+package com.comenendez.saboreszgz.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.comenendez.saboreszgz.R;
+import com.comenendez.saboreszgz.adapters.RestauranteAdapter;
 import com.comenendez.saboreszgz.data.FirebaseRepository;
+import com.comenendez.saboreszgz.helpers.FirebaseHelper;  // ← IMPORTAR FIREBASEHELPER
 import com.comenendez.saboreszgz.model.Restaurante;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
@@ -40,14 +44,21 @@ public class FavoritosActivity extends AppCompatActivity {
         cargarFavoritos();
     }
 
+    // ============================================================
+    // CARGAR FAVORITOS
+    // ============================================================
     private void cargarFavoritos() {
-        if (!repository.isUserLoggedIn()) {
+        // ============================================================
+        // ANTES: if (!repository.isUserLoggedIn())
+        // AHORA: Usamos FirebaseHelper
+        // ============================================================
+        if (!FirebaseHelper.isUserLoggedIn()) {
             Toast.makeText(this, "Inicia sesión para ver tus favoritos", Toast.LENGTH_LONG).show();
             finish();
             return;
         }
 
-        // Recargar usuario
+        // Recargar usuario (esto sigue igual porque es del repository)
         repository.loadCurrentUser();
 
         new android.os.Handler().postDelayed(() -> {
@@ -75,6 +86,9 @@ public class FavoritosActivity extends AppCompatActivity {
         }, 500);
     }
 
+    // ============================================================
+    // AL VOLVER A LA ACTIVIDAD, RECARGAR
+    // ============================================================
     @Override
     protected void onResume() {
         super.onResume();

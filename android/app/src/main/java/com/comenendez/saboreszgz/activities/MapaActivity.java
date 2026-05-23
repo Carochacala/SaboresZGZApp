@@ -1,7 +1,10 @@
-package com.comenendez.saboreszgz;
+package com.comenendez.saboreszgz.activities;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.comenendez.saboreszgz.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -88,19 +91,26 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
 
-        // Centrar el mapa en el primer restaurante si existe
+        // Centrar el mapa
         if (!restaurantes.isEmpty() && restaurantes.get(0).getUbicacion() != null) {
             LatLng centro = new LatLng(
                     restaurantes.get(0).getUbicacion().getLatitude(),
                     restaurantes.get(0).getUbicacion().getLongitude()
             );
-            mMap.moveCamera(com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom(centro, 12));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centro, 12));
+        } else {
+            // 👇 AÑADE ESTE else
+            LatLng zaragoza = new LatLng(41.6488, -0.8891);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(zaragoza, 12));
         }
     }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         agregarMarcadores();
     }
+
+
 }

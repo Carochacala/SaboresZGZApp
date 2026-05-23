@@ -1,19 +1,38 @@
-package com.comenendez.saboreszgz;
+package com.comenendez.saboreszgz.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.comenendez.saboreszgz.R;
+import com.comenendez.saboreszgz.adapters.TipoComida;
+import com.comenendez.saboreszgz.adapters.TipoAdapter;
+import com.google.android.material.navigation.NavigationView;
+import com.comenendez.saboreszgz.helpers.MenuHelper;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TiposComidaActivity extends AppCompatActivity {
 
+    private DrawerLayout drawerLayout;
+    private Toolbar toolbar;
+    private NavigationView navigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tipo_comida);
+
+        // ========== CONFIGURAR MENÚ (NUEVO) ==========
+        drawerLayout = findViewById(R.id.drawer_layout);
+        toolbar = findViewById(R.id.toolbar);
+        navigationView = findViewById(R.id.nav_view);
+        MenuHelper.setupMenu(this, drawerLayout, toolbar, navigationView);
+        // =============================================
 
         RecyclerView recycler = findViewById(R.id.recyclerTipos);
         recycler.setLayoutManager(new GridLayoutManager(this, 2));
@@ -47,5 +66,10 @@ public class TiposComidaActivity extends AppCompatActivity {
         });
 
         recycler.setAdapter(adapter);
+    }
+
+    @Override
+    public void onBackPressed() {
+        MenuHelper.handleBackPressed(this, drawerLayout);
     }
 }

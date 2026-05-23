@@ -1,4 +1,4 @@
-package com.comenendez.saboreszgz;
+package com.comenendez.saboreszgz.adapters;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -10,6 +10,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.comenendez.saboreszgz.R;
+import com.comenendez.saboreszgz.activities.DetalleRestauranteActivity;
 import com.comenendez.saboreszgz.data.FirebaseRepository;
 import com.comenendez.saboreszgz.model.Valoracion;
 import java.text.SimpleDateFormat;
@@ -93,14 +96,14 @@ public class ValoracionAdapter extends RecyclerView.Adapter<ValoracionAdapter.Va
                 .setTitle("Eliminar valoración")
                 .setMessage("¿Seguro que quieres eliminar tu valoración?")
                 .setPositiveButton("Eliminar", (dialog, which) -> {
+
                     repository.deleteValoracion(valoracion.getId(), task -> {
-                        if (task.isSuccessful()) {
+                        if (task != null && task.isSuccessful()) {  // ← AÑADE null check
                             // Eliminar de la lista local
                             listaValoraciones.remove(position);
                             notifyItemRemoved(position);
                             notifyItemRangeChanged(position, listaValoraciones.size());
 
-                            // Actualizar la actividad (sin recargar todo)
                             if (context instanceof DetalleRestauranteActivity) {
                                 ((DetalleRestauranteActivity) context).onValoracionEliminada();
                             }
@@ -116,6 +119,7 @@ public class ValoracionAdapter extends RecyclerView.Adapter<ValoracionAdapter.Va
     }
     public void updateUsuarioId() {
         this.usuarioActualId = repository.getCurrentUserId();
+        notifyDataSetChanged();
     }
 
     @Override

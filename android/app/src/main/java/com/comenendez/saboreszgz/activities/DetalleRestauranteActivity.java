@@ -1,4 +1,4 @@
-package com.comenendez.saboreszgz;
+package com.comenendez.saboreszgz.activities;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -13,12 +13,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.comenendez.saboreszgz.R;
+import com.comenendez.saboreszgz.adapters.ValoracionAdapter;
 import com.comenendez.saboreszgz.data.FirebaseRepository;
+import com.comenendez.saboreszgz.helpers.MenuHelper;
+import com.comenendez.saboreszgz.helpers.ValidacionHelper;  // ← IMPORTAR
+import com.comenendez.saboreszgz.helpers.FirebaseHelper;    // ← IMPORTAR
 import com.comenendez.saboreszgz.model.Restaurante;
 import com.comenendez.saboreszgz.model.Valoracion;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,6 +34,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
@@ -49,10 +57,21 @@ public class DetalleRestauranteActivity extends AppCompatActivity implements OnM
     private String valoracionIdActual;
     private boolean modoEdicion = false;
 
+    private DrawerLayout drawerLayout;
+    private Toolbar toolbar;
+    private NavigationView navigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalle_restaurante);
+
+        // ========== CONFIGURAR MENÚ ==========
+        drawerLayout = findViewById(R.id.drawer_layout);
+        toolbar = findViewById(R.id.toolbar);
+        navigationView = findViewById(R.id.nav_view);
+        MenuHelper.setupMenu(this, drawerLayout, toolbar, navigationView);
+        // ====================================
 
         // Inicializar views
         tvNombre = findViewById(R.id.tvNombre);
@@ -104,7 +123,7 @@ public class DetalleRestauranteActivity extends AppCompatActivity implements OnM
                     btnEnviarValoracion.setOnClickListener(v -> guardarCambios());
                 }
             });
-        } else if (repository.isUserLoggedIn()) {
+        } else if (FirebaseHelper.isUserLoggedIn()) {  // ← CAMBIADO
             // MODO NORMAL - Usuario logueado
             // Verificar si el usuario ya tiene valoración
             repository.getUserValoracion(restauranteId, task -> {
@@ -131,12 +150,15 @@ public class DetalleRestauranteActivity extends AppCompatActivity implements OnM
                         int puntuacion = (int) ratingBar.getRating();
                         String comentario = etComentario.getText().toString().trim();
 
-                        if (puntuacion == 0) {
-                            Toast.makeText(this, "Selecciona una puntuación", Toast.LENGTH_SHORT).show();
+                        // ============================================================
+                        // VALIDACIONES CON VALIDACIONHELPER
+                        // ============================================================
+                        if (!ValidacionHelper.isPuntuacionValida(puntuacion)) {
+                            Toast.makeText(this, "Selecciona una puntuación (1-5)", Toast.LENGTH_SHORT).show();
                             return;
                         }
 
-                        if (comentario.isEmpty()) {
+                        if (ValidacionHelper.isCampoVacio(comentario)) {
                             Toast.makeText(this, "Escribe un comentario", Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -185,7 +207,7 @@ public class DetalleRestauranteActivity extends AppCompatActivity implements OnM
 
         // ========== BOTÓN FAVORITO ==========
         btnFavorito.setOnClickListener(v -> {
-            if (repository.isUserLoggedIn()) {
+            if (FirebaseHelper.isUserLoggedIn()) {  // ← CAMBIADO
                 if (repository.isFavorite(restauranteId)) {
                     repository.removeFavorite(restauranteId, task -> {
                         Toast.makeText(this, "Eliminado de favoritos", Toast.LENGTH_SHORT).show();
@@ -224,23 +246,42 @@ public class DetalleRestauranteActivity extends AppCompatActivity implements OnM
         });
     }
 
+    // ============================================================
+    // GUARDAR CAMBIOS EN VALORACIÓN (CON VALIDACIONES)
+    // ============================================================
     private void guardarCambios() {
         int puntuacion = (int) ratingBar.getRating();
         String comentario = etComentario.getText().toString().trim();
 
-        if (puntuacion == 0) {
-            Toast.makeText(this, "Selecciona una puntuación", Toast.LENGTH_SHORT).show();
+        // ============================================================
+        // VALIDACIONES CON VALIDACIONHELPER
+        // ============================================================
+        if (!ValidacionHelper.isPuntuacionValida(puntuacion)) {
+            Toast.makeText(this, "Selecciona una puntuación (1-5)", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (comentario.isEmpty()) {
+        if (ValidacionHelper.isCampoVacio(comentario)) {
             Toast.makeText(this, "Escribe un comentario", Toast.LENGTH_SHORT).show();
             return;
         }
 
         repository.updateValoracion(valoracionIdActual, puntuacion, comentario, task -> {
             Toast.makeText(this, "Valoración actualizada", Toast.LENGTH_SHORT).show();
-            finish();
+
+            // Recargar las valoraciones
+            cargarValoraciones();
+
+            // Limpiar el formulario y ocultarlo
+            ratingBar.setRating(0);
+            etComentario.setText("");
+            ratingBar.setVisibility(View.GONE);
+            etComentario.setVisibility(View.GONE);
+            btnEnviarValoracion.setVisibility(View.GONE);
+
+            // Resetear modo edición
+            valoracionIdActual = null;
+            modoEdicion = false;
         });
     }
 
@@ -293,7 +334,7 @@ public class DetalleRestauranteActivity extends AppCompatActivity implements OnM
             imgRestaurante.setImageResource(android.R.drawable.ic_menu_gallery);
         }
 
-        if (repository.isUserLoggedIn() && repository.isFavorite(restauranteId)) {
+        if (FirebaseHelper.isUserLoggedIn() && repository.isFavorite(restauranteId)) {
             btnFavorito.setText("Eliminar de favoritos");
         }
     }
@@ -305,6 +346,7 @@ public class DetalleRestauranteActivity extends AppCompatActivity implements OnM
             mapFragment.getMapAsync(this);
         }
     }
+
     private void abrirRutaEnGoogleMaps() {
         if (restaurante == null || restaurante.getUbicacion() == null) {
             Toast.makeText(this, "No hay ubicación disponible", Toast.LENGTH_SHORT).show();
@@ -315,7 +357,6 @@ public class DetalleRestauranteActivity extends AppCompatActivity implements OnM
         double lng = restaurante.getUbicacion().getLongitude();
         String nombre = restaurante.getNombre();
 
-        // Construir URI para abrir Google Maps con ruta
         Uri uri = Uri.parse("google.navigation:q=" + lat + "," + lng + "&mode=d");
 
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
@@ -324,12 +365,12 @@ public class DetalleRestauranteActivity extends AppCompatActivity implements OnM
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         } else {
-            // Si no tiene Google Maps, abrir en navegador
             Uri webUri = Uri.parse("https://maps.google.com/maps?q=" + lat + "," + lng);
             Intent webIntent = new Intent(Intent.ACTION_VIEW, webUri);
             startActivity(webIntent);
         }
     }
+
     private void compartirRestaurante() {
         if (restaurante == null) return;
 
@@ -351,9 +392,21 @@ public class DetalleRestauranteActivity extends AppCompatActivity implements OnM
     }
 
     private void cargarValoraciones() {
+        android.util.Log.d("DEPURAR", "7. cargarValoraciones INICIO");
+
         repository.getValoracionesByRestaurante(restauranteId, (value, error) -> {
-            if (error != null) return;
-            if (value == null) return;
+            android.util.Log.d("DEPURAR", "8. Callback recibido");
+
+            if (error != null) {
+                android.util.Log.d("DEPURAR", "9. ERROR: " + error.getMessage());
+                return;
+            }
+            if (value == null) {
+                android.util.Log.d("DEPURAR", "10. value es null");
+                return;
+            }
+
+            android.util.Log.d("DEPURAR", "11. Documentos: " + value.size());
 
             listaValoraciones.clear();
             for (QueryDocumentSnapshot doc : value) {
@@ -365,15 +418,17 @@ public class DetalleRestauranteActivity extends AppCompatActivity implements OnM
             }
             valoracionAdapter.updateList(listaValoraciones);
 
+            android.util.Log.d("DEPURAR", "12. Adapter actualizado");
+
             if (valoracionAdapter != null) {
                 valoracionAdapter.updateUsuarioId();
+                android.util.Log.d("DEPURAR", "13. Usuario ID actualizado");
             }
 
             // Si no hay valoraciones y estamos en modo normal (no edición), limpiar el formulario
             if (!modoEdicion && listaValoraciones.isEmpty()) {
-                // Verificar si el usuario actual tiene valoración
                 boolean tieneMiValoracion = false;
-                String userId = repository.getCurrentUserId();
+                String userId = FirebaseHelper.getCurrentUserId();  // ← CAMBIADO
                 for (Valoracion v : listaValoraciones) {
                     if (v.getUsuarioId().equals(userId)) {
                         tieneMiValoracion = true;
@@ -388,23 +443,32 @@ public class DetalleRestauranteActivity extends AppCompatActivity implements OnM
                     valoracionIdActual = null;
                 }
             }
+            android.util.Log.d("DEPURAR", "14. cargarValoraciones FIN (sin errores)");
         });
+        android.util.Log.d("DEPURAR", "15. cargarValoraciones salió del método (async)");
+    }
+
+    @Override
+    public void onBackPressed() {
+        MenuHelper.handleBackPressed(this, drawerLayout);
     }
 
     public void onValoracionEliminada() {
-        // Resetear el ID
+        android.util.Log.d("DEPURAR", "1. onValoracionEliminada INICIO");
         valoracionIdActual = null;
+        android.util.Log.d("DEPURAR", "2. ID reseteado");
 
-        // Mostrar formulario para nueva valoración
         ratingBar.setVisibility(View.VISIBLE);
         etComentario.setVisibility(View.VISIBLE);
         btnEnviarValoracion.setVisibility(View.VISIBLE);
         ratingBar.setRating(0);
         etComentario.setText("");
         btnEnviarValoracion.setText("Enviar valoración");
+        android.util.Log.d("DEPURAR", "3. Formulario visible");
 
-        // Configurar botón para enviar
         btnEnviarValoracion.setOnClickListener(v -> {
+            android.util.Log.d("DEPURAR", "4. Botón click");
+
             int puntuacion = (int) ratingBar.getRating();
             String comentario = etComentario.getText().toString().trim();
 
@@ -423,12 +487,13 @@ public class DetalleRestauranteActivity extends AppCompatActivity implements OnM
                 ratingBar.setVisibility(View.GONE);
                 etComentario.setVisibility(View.GONE);
                 btnEnviarValoracion.setVisibility(View.GONE);
-                // Recargar valoraciones para que aparezca la nueva tarjeta
+
+                android.util.Log.d("DEPURAR", "5. ANTES de cargarValoraciones()");
                 cargarValoraciones();
+                android.util.Log.d("DEPURAR", "6. DESPUÉS de cargarValoraciones()");
             });
         });
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -440,9 +505,8 @@ public class DetalleRestauranteActivity extends AppCompatActivity implements OnM
                     restaurante.getUbicacion().getLongitude()
             );
 
-            // ✅ AÑADIR .anchor(0.5f, 1.0f) para que la punta toque el suelo
             mMap.addMarker(new MarkerOptions()
-                    .anchor(0.5f, 1.0f)  // ← ESTO ES CLAVE
+                    .anchor(0.5f, 1.0f)
                     .position(ubicacion)
                     .title(restaurante.getNombre())
                     .snippet(restaurante.getDireccion()));

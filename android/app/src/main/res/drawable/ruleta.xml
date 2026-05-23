@@ -1,0 +1,42 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <!-- Círculo exterior -->
+    <path
+        android:fillColor="#FF5722"
+        android:pathData="M100,10 a90,90 0 1,1 0,180 a90,90 0 1,1 0,-180z" />
+
+    <!-- Sector 1 (rojo) -->
+    <path
+        android:fillColor="#F44336"
+        android:pathData="M100,100 L100,10 A90,90 0 0,1 163,37 z" />
+
+    <!-- Sector 2 (amarillo) -->
+    <path
+        android:fillColor="#FFC107"
+        android:pathData="M100,100 L163,37 A90,90 0 0,1 163,163 z" />
+
+    <!-- Sector 3 (verde) -->
+    <path
+        android:fillColor="#4CAF50"
+        android:pathData="M100,100 L163,163 A90,90 0 0,1 37,163 z" />
+
+    <!-- Sector 4 (azul) -->
+    <path
+        android:fillColor="#2196F3"
+        android:pathData="M100,100 L37,163 A90,90 0 0,1 37,37 z" />
+
+    <!-- Sector 5 (naranja) -->
+    <path
+        android:fillColor="#FF9800"
+        android:pathData="M100,100 L37,37 A90,90 0 0,1 100,10 z" />
+
+    <!-- Círculo central -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M100,85 a15,15 0 1,1 0,30 a15,15 0 1,1 0,-30z" />
+
+</vector>

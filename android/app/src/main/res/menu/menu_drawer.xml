@@ -27,6 +27,11 @@
         </menu>
     </item>
 
+    <item
+        android:id="@+id/nav_ruleta"
+        android:icon="@android:drawable/ic_menu_more"
+        android:title="🎰 Ruleta" />
+
     <!-- Sección Explorar -->
     <item android:title="EXPLORAR">
         <menu>
@@ -42,18 +47,18 @@
         </menu>
     </item>
 
-    <!-- Sección Cuenta -->
-    <item android:title="CUENTA">
+    <!-- Sección Ayuda -->
+    <item android:title="AYUDA">
         <menu>
             <item
-                android:id="@+id/nav_perfil"
-                android:icon="@android:drawable/ic_menu_edit"
-                android:title="Mi Perfil" />
+                android:id="@+id/nav_manual_usuario"
+                android:icon="@android:drawable/ic_menu_info_details"
+                android:title="📖 Manual de Usuario" />
 
             <item
-                android:id="@+id/nav_configuracion"
-                android:icon="@android:drawable/ic_menu_preferences"
-                android:title="Configuración" />
+                android:id="@+id/nav_manual_instalacion"
+                android:icon="@android:drawable/ic_menu_info_details"
+                android:title="🔧 Manual de Instalación" />
         </menu>
     </item>
 

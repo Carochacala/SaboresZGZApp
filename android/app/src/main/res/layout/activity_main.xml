@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondo_cielo"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
     <ImageView
         android:id="@+id/imageView"
@@ -26,6 +26,7 @@
         android:layout_marginHorizontal="32dp"
         android:layout_marginBottom="32dp"
         android:background="#FFFFFF"
+        android:alpha="0.95"
         android:orientation="vertical"
         android:padding="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -38,6 +39,8 @@
             android:layout_height="50dp"
             android:background="#F0F0F0"
             android:hint="Correo electrónico"
+            android:textColor="#000000"
+            android:textColorHint="#757575"
             android:inputType="textEmailAddress"
             android:padding="12dp" />
 
@@ -48,6 +51,8 @@
             android:layout_marginTop="16dp"
             android:background="#F0F0F0"
             android:hint="Contraseña"
+            android:textColor="#000000"
+            android:textColorHint="#757575"
             android:inputType="textPassword"
             android:padding="12dp" />
 

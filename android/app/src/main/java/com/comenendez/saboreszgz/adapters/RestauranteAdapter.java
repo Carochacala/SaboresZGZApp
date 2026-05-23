@@ -1,4 +1,4 @@
-package com.comenendez.saboreszgz;
+package com.comenendez.saboreszgz.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,28 +8,35 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.comenendez.saboreszgz.model.Restaurante;
-import com.squareup.picasso.Picasso;
-import java.util.List;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.comenendez.saboreszgz.R;
+import com.comenendez.saboreszgz.helpers.ImageHelper;  // ← IMPORTAR IMAGEHELPER
+import com.comenendez.saboreszgz.model.Restaurante;
+import java.util.List;
 
 public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.RestauranteViewHolder> {
 
     private List<Restaurante> listaRestaurantes;
     private OnRestauranteClickListener listener;
 
-    // Interfaz para manejar clics
+    // ============================================================
+    // INTERFAZ PARA MANEJAR CLICS
+    // ============================================================
     public interface OnRestauranteClickListener {
         void onRestauranteClick(Restaurante restaurante);
     }
 
+    // ============================================================
+    // CONSTRUCTOR
+    // ============================================================
     public RestauranteAdapter(List<Restaurante> listaRestaurantes, OnRestauranteClickListener listener) {
         this.listaRestaurantes = listaRestaurantes;
         this.listener = listener;
     }
 
+    // ============================================================
+    // CREAR VISTA (ViewHolder)
+    // ============================================================
     @Override
     public RestauranteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View vista = LayoutInflater.from(parent.getContext())
@@ -37,12 +44,17 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
         return new RestauranteViewHolder(vista);
     }
 
+    // ============================================================
+    // ENLAZAR DATOS CON LA VISTA
+    // ============================================================
     @Override
     public void onBindViewHolder(@NonNull RestauranteViewHolder holder, int position) {
         Restaurante restauranteActual = listaRestaurantes.get(position);
 
+        // --- NOMBRE DEL RESTAURANTE ---
         holder.tvNombreR.setText(restauranteActual.getNombre());
 
+        // --- PLATO DESTACADO ---
         // Si platoDestacado es una lista, muestra el primer elemento
         if (restauranteActual.getPlatoDestacado() != null && !restauranteActual.getPlatoDestacado().isEmpty()) {
             holder.tvdescripcionCortaR.setText(restauranteActual.getPlatoDestacado().get(0));
@@ -50,60 +62,69 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
             holder.tvdescripcionCortaR.setText("Plato destacado");
         }
 
+        // --- VALORACIÓN MEDIA (ESTRELLAS) ---
         holder.rbestrellasR.setRating((float) restauranteActual.getValoracionMedia());
 
-        // Distancia - si no tienes este campo en Firestore, puedes ocultarlo o calcularlo
-        // Por ahora lo dejamos con valor predeterminado
-        holder.tvDistanciaR.setVisibility(View.GONE); // Ocultar si no lo usas
+        // --- DISTANCIA (OCULTA, NO SE USA) ---
+        holder.tvDistanciaR.setVisibility(View.GONE);
 
-        // Cargar imagen desde URL (fotoUrl)
-        if (restauranteActual.getFotoUrl() != null && !restauranteActual.getFotoUrl().isEmpty()) {
-            Glide.with(holder.itemView.getContext())
-                    .load(restauranteActual.getFotoUrl())
-                    .placeholder(android.R.drawable.ic_delete)
-                    .error(android.R.drawable.ic_delete)
-                    .centerCrop()
-                    .into(holder.imgRestaurante);
-        } else {
-            holder.imgRestaurante.setImageResource(android.R.drawable.ic_delete);
-        }
+        // ============================================================
+        // CARGA DE IMAGEN CON IMAGEHELPER (SIMPLIFICADO)
+        // ============================================================
+        // Antes: 10 líneas de Glide
+        // Ahora: 1 línea
+        ImageHelper.cargarImagen(holder.itemView.getContext(),
+                restauranteActual.getFotoUrl(),
+                holder.imgRestaurante);
+        // ============================================================
 
-
-        // Manejar clic
+        // --- MANEJAR CLIC EN EL ITEM ---
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onRestauranteClick(restauranteActual);
             }
         });
-
-
     }
+
+    // ============================================================
+    // MÉTODO OPCIONAL (YA NO SE USA PORQUE IMAGEHELPER LO HACE)
+    // Pero lo dejamos comentado por si lo necesitas
+    // ============================================================
+    /*
     private void cargarImagen(String url, ImageView imageView) {
         if (url == null || url.isEmpty()) {
             imageView.setImageResource(android.R.drawable.ic_menu_gallery);
             return;
         }
-
         Glide.with(imageView.getContext())
                 .load(url)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)  // ← Guarda en caché para offline
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(android.R.drawable.ic_menu_gallery)
                 .error(android.R.drawable.ic_menu_gallery)
                 .centerCrop()
                 .into(imageView);
     }
+    */
 
+    // ============================================================
+    // NÚMERO DE ITEMS
+    // ============================================================
     @Override
     public int getItemCount() {
         return listaRestaurantes != null ? listaRestaurantes.size() : 0;
     }
 
-    // Método para actualizar la lista
+    // ============================================================
+    // ACTUALIZAR LISTA
+    // ============================================================
     public void updateList(List<Restaurante> nuevaLista) {
         this.listaRestaurantes = nuevaLista;
         notifyDataSetChanged();
     }
 
+    // ============================================================
+    // VIEWHOLDER (CONTENEDOR DE VISTAS)
+    // ============================================================
     public static class RestauranteViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvNombreR, tvdescripcionCortaR, tvDistanciaR;
