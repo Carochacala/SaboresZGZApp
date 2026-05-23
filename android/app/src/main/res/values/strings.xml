@@ -1,4 +1,24 @@
 <resources>
-    <string name="app_name">Sabores_ZGZ</string>
-    <string name="default_web_client_id">TU_WEB_CLIENT_ID_AQUI</string>
+    <string name="app_name">Sabores ZGZ</string>
+
+    <!-- Títulos del menú (secciones) -->
+    <string name="menu_mis_cosas">MIS COSAS</string>
+    <string name="menu_explorar">EXPLORAR</string>
+    <string name="menu_ayuda">AYUDA</string>
+
+    <!-- Opciones del menú -->
+    <string name="nav_inicio">Inicio</string>
+    <string name="nav_tipos_comida">Tipos de Comida</string>
+    <string name="nav_favoritos">Mis Favoritos</string>
+    <string name="nav_mis_valoraciones">Mis Valoraciones</string>
+    <string name="nav_ruleta">🎰 Ruleta</string>
+    <string name="nav_mapa">Ver en Mapa</string>
+    <string name="nav_cerca_de_mi">Cerca de mí</string>
+    <string name="nav_manual_usuario">📖 Manual de Usuario</string>
+    <string name="nav_manual_instalacion">🔧 Manual de Instalación</string>
+    <string name="nav_about">Acerca de</string>
+    <string name="nav_logout">Cerrar Sesión</string>
+
+    <!-- Google Sign-In -->
+    <string name="default_web_client_id">485950113186-nuodp603npg4na8754e81fhejc50ao9v.apps.googleusercontent.com</string>
 </resources>

@@ -5,60 +5,60 @@
     <item
         android:id="@+id/nav_inicio"
         android:icon="@android:drawable/ic_dialog_info"
-        android:title="Inicio" />
+        android:title="@string/nav_inicio" />
 
     <item
         android:id="@+id/nav_tipos_comida"
         android:icon="@android:drawable/ic_menu_agenda"
-        android:title="Tipos de Comida" />
+        android:title="@string/nav_tipos_comida" />
 
     <!-- Sección Mis Cosas -->
-    <item android:title="MIS COSAS">
+    <item android:title="@string/menu_mis_cosas">
         <menu>
             <item
                 android:id="@+id/nav_favoritos"
                 android:icon="@android:drawable/ic_menu_save"
-                android:title="Mis Favoritos" />
+                android:title="@string/nav_favoritos" />
 
             <item
                 android:id="@+id/nav_mis_valoraciones"
                 android:icon="@android:drawable/ic_menu_edit"
-                android:title="Mis Valoraciones" />
+                android:title="@string/nav_mis_valoraciones" />
         </menu>
     </item>
 
     <item
         android:id="@+id/nav_ruleta"
         android:icon="@android:drawable/ic_menu_more"
-        android:title="🎰 Ruleta" />
+        android:title="@string/nav_ruleta" />
 
     <!-- Sección Explorar -->
-    <item android:title="EXPLORAR">
+    <item android:title="@string/menu_explorar">
         <menu>
             <item
                 android:id="@+id/nav_mapa"
                 android:icon="@android:drawable/ic_menu_mapmode"
-                android:title="Ver en Mapa" />
+                android:title="@string/nav_mapa" />
 
             <item
                 android:id="@+id/nav_cerca_de_mi"
                 android:icon="@android:drawable/ic_menu_myplaces"
-                android:title="Cerca de mí" />
+                android:title="@string/nav_cerca_de_mi" />
         </menu>
     </item>
 
     <!-- Sección Ayuda -->
-    <item android:title="AYUDA">
+    <item android:title="@string/menu_ayuda">
         <menu>
             <item
                 android:id="@+id/nav_manual_usuario"
                 android:icon="@android:drawable/ic_menu_info_details"
-                android:title="📖 Manual de Usuario" />
+                android:title="@string/nav_manual_usuario" />
 
             <item
                 android:id="@+id/nav_manual_instalacion"
                 android:icon="@android:drawable/ic_menu_info_details"
-                android:title="🔧 Manual de Instalación" />
+                android:title="@string/nav_manual_instalacion" />
         </menu>
     </item>
 
@@ -66,11 +66,11 @@
     <item
         android:id="@+id/nav_about"
         android:icon="@android:drawable/ic_menu_info_details"
-        android:title="Acerca de" />
+        android:title="@string/nav_about" />
 
     <item
         android:id="@+id/nav_logout"
         android:icon="@android:drawable/ic_lock_lock"
-        android:title="Cerrar Sesión" />
+        android:title="@string/nav_logout" />
 
 </menu>

@@ -45,9 +45,10 @@ public class MainActivity extends AppCompatActivity {
         // 🔥 Inicializar Firebase
         auth = FirebaseAuth.getInstance();
 
+
         // ========== CONFIGURAR GOOGLE SIGN-IN ==========
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("485950113186-nuodp603npg4na8754e81fhejc50ao9v.apps.googleusercontent.com")
+                .requestIdToken(getString(R.string.default_web_client_id))  // ← Usar string.xml
                 .requestEmail()
                 .build();
 
@@ -133,7 +134,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Recuperar contraseña
+        // 🔓 RECUPERAR CONTRASEÑA
+
         TextView tvOlvidoPass = findViewById(R.id.tvOlvidoPass);
         tvOlvidoPass.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
