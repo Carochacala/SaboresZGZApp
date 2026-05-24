@@ -32,12 +32,20 @@
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchViewPaises"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtTitulo"
+                android:layout_marginTop="12dp"
+                app:iconifiedByDefault="false"
+                app:queryHint="Buscar país..." />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerTipos"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/txtTitulo"
+                android:layout_below="@id/searchViewPaises"
                 android:layout_marginTop="16dp"/>
 
         </RelativeLayout>

@@ -15,6 +15,7 @@ import java.util.List;
 public class TipoAdapter extends RecyclerView.Adapter<TipoAdapter.ViewHolder> {
 
     private List<TipoComida> listaTipos;
+    private List<TipoComida> listaOriginal;
     private OnItemClickListener listener;
 
     public interface OnItemClickListener {
@@ -24,6 +25,8 @@ public class TipoAdapter extends RecyclerView.Adapter<TipoAdapter.ViewHolder> {
     public TipoAdapter(List<TipoComida> listaTipos, OnItemClickListener listener) {
         this.listaTipos = listaTipos;
         this.listener = listener;
+        this.listaOriginal = new java.util.ArrayList<>();
+        this.listaOriginal.addAll(listaTipos); // Guardamos la copia de seguridad
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -76,5 +79,21 @@ public class TipoAdapter extends RecyclerView.Adapter<TipoAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return listaTipos.size();
+    }
+
+    public void filtrar(String textoBuscado) {
+        listaTipos.clear(); // Limpiamos la lista que se ve en pantalla
+
+        if (textoBuscado.length() == 0) {
+            listaTipos.addAll(listaOriginal); // Si el buscador está vacío, mostramos todos
+        } else {
+            textoBuscado = textoBuscado.toLowerCase(); // Pasamos a minúsculas para comparar mejor
+            for (TipoComida tipo : listaOriginal) {
+                if (tipo.getNombre().toLowerCase().contains(textoBuscado)) {
+                    listaTipos.add(tipo); // Si coincide, lo añadimos a la pantalla
+                }
+            }
+        }
+        notifyDataSetChanged(); // Le avisamos al RecyclerView que redibuje las tarjetas
     }
 }

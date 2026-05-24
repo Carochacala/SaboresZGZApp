@@ -39,25 +39,32 @@ public class TiposComidaActivity extends AppCompatActivity {
         recycler.setHasFixedSize(true);
 
         List<TipoComida> listaTipos = new ArrayList<>();
-        listaTipos.add(new TipoComida("Italia", R.drawable.bandera_italia, R.drawable.plato_italiano));
-        listaTipos.add(new TipoComida("Japón", R.drawable.bandera_japon, R.drawable.plato_japones));
-        listaTipos.add(new TipoComida("México", R.drawable.bandera_mexico, R.drawable.plato_mexicano));
+
+        listaTipos.add(new TipoComida("Argentina", R.drawable.bandera_argentina, R.drawable.plato_argentino));
+        listaTipos.add(new TipoComida("Bolivia", R.drawable.bandera_bolivia, R.drawable.plato_boliviano));
+        listaTipos.add(new TipoComida("Chile", R.drawable.bandera_chile, R.drawable.plato_chileno));
+        listaTipos.add(new TipoComida("China", R.drawable.bandera_china, R.drawable.plato_chino));
+        listaTipos.add(new TipoComida("Colombia", R.drawable.bandera_colombia, R.drawable.plato_colombiano));
+        listaTipos.add(new TipoComida("Corea del Sur", R.drawable.bandera_corea, R.drawable.plato_coreano));
+        listaTipos.add(new TipoComida("Cuba", R.drawable.bandera_cuba, R.drawable.plato_cubano));
+        listaTipos.add(new TipoComida("Ecuador", R.drawable.bandera_ecuador, R.drawable.plato_ecuatoriano));
+        listaTipos.add(new TipoComida("El Salvador", R.drawable.bandera_salvador, R.drawable.plato_salvadoreno));
         listaTipos.add(new TipoComida("Estados Unidos", R.drawable.bandera_estados_unidos, R.drawable.plato_americano));
         listaTipos.add(new TipoComida("Francia", R.drawable.bandera_francia, R.drawable.plato_frances));
-        listaTipos.add(new TipoComida("Colombia", R.drawable.bandera_colombia, R.drawable.plato_colombiano));
-        listaTipos.add(new TipoComida("India", R.drawable.bandera_india, R.drawable.plato_indu));
-        listaTipos.add(new TipoComida("China", R.drawable.bandera_china, R.drawable.plato_chino));
-        listaTipos.add(new TipoComida("Turquía", R.drawable.bandera_turquia, R.drawable.plato_turco));
-        listaTipos.add(new TipoComida("Venezuela", R.drawable.bandera_venezuela, R.drawable.plato_venezolano));
         listaTipos.add(new TipoComida("Grecia", R.drawable.bandera_grecia, R.drawable.plato_griego));
-        listaTipos.add(new TipoComida("Argentina", R.drawable.bandera_argentina, R.drawable.plato_argentino));
+
+        listaTipos.add(new TipoComida("Honduras", R.drawable.bandera_honduras, R.drawable.plato_hondureno));
+        listaTipos.add(new TipoComida("India", R.drawable.bandera_india, R.drawable.plato_indu));
+        listaTipos.add(new TipoComida("Italia", R.drawable.bandera_italia, R.drawable.plato_italiano));
+        listaTipos.add(new TipoComida("Japón", R.drawable.bandera_japon, R.drawable.plato_japones));
+        listaTipos.add(new TipoComida("Marruecos", R.drawable.bandera_marruecos, R.drawable.plato_marroqui));
+        listaTipos.add(new TipoComida("México", R.drawable.bandera_mexico, R.drawable.plato_mexicano));
+        listaTipos.add(new TipoComida("Nicaragua", R.drawable.bandera_nicaragua, R.drawable.plato_nicaraguense));
         listaTipos.add(new TipoComida("Perú", R.drawable.bandera_peru, R.drawable.plato_peruano));
         listaTipos.add(new TipoComida("Tailandia", R.drawable.bandera_tailandia, R.drawable.plato_tailandes));
-        listaTipos.add(new TipoComida("Corea del Sur", R.drawable.bandera_corea, R.drawable.plato_coreano));
-        listaTipos.add(new TipoComida("Alemania", R.drawable.bandera_alemania, R.drawable.plato_aleman));
-        listaTipos.add(new TipoComida("Brasil", R.drawable.bandera_brasil, R.drawable.plato_brasileno));
-        listaTipos.add(new TipoComida("Cuba", R.drawable.bandera_cuba, R.drawable.plato_cubano));
-        listaTipos.add(new TipoComida("Marruecos", R.drawable.bandera_marruecos, R.drawable.plato_marroqui));
+        listaTipos.add(new TipoComida("Turquía", R.drawable.bandera_turquia, R.drawable.plato_turco));
+        listaTipos.add(new TipoComida("Uruguay", R.drawable.bandera_uruguay, R.drawable.plato_uruguayo));
+        listaTipos.add(new TipoComida("Venezuela", R.drawable.bandera_venezuela, R.drawable.plato_venezolano));
 
         TipoAdapter adapter = new TipoAdapter(listaTipos, tipo -> {
             Intent intent = new Intent(TiposComidaActivity.this, RestauranteActivity.class);
@@ -66,6 +73,22 @@ public class TiposComidaActivity extends AppCompatActivity {
         });
 
         recycler.setAdapter(adapter);
+
+        //Para filtrado o busqueda de pais por texto
+        // Conectar el buscador
+        androidx.appcompat.widget.SearchView searchView = findViewById(R.id.searchViewPaises);
+        searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.filtrar(newText);
+                return true;
+            }
+        });
     }
 
     @Override
