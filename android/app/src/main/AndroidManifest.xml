@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Sabores_ZGZ">
+        android:theme="@style/Theme.saboreszgz">
         <activity
             android:name=".activities.ManualActivity"
             android:exported="false" />

@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:485950113186:android:8171fe36df73694ea55efb",
         "android_client_info": {
-          "package_name": "com.comenendez.sabores_zgz"
+          "package_name": "com.comenendez.saboreszgz"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "485950113186-c69guhf5i5pldnpaatiavf333kp4i3bo.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.comenendez.sabores_zgz",
+            "package_name": "com.comenendez.saboreszgz",
             "certificate_hash": "7d5f62235642ebc00d3c092104ad8fe47d8a4802"
           }
         },
@@ -25,7 +25,7 @@
           "client_id": "485950113186-uire8shqj4s2dfjecekm6kuojtcl7nkk.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.comenendez.sabores_zgz",
+            "package_name": "com.comenendez.saboreszgz",
             "certificate_hash": "c4f00d82e4c894ecb7962aafd006c41deb270350"
           }
         },
