@@ -14,7 +14,6 @@ import com.comenendez.saboreszgz.data.FirebaseRepository;
 import com.comenendez.saboreszgz.model.Restaurante;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,44 +36,56 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
 
         repository = FirebaseRepository.getInstance();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        // ✅ Centrar en Zaragoza mientras cargan los datos
+        LatLng zaragoza = new LatLng(41.6488, -0.8891);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(zaragoza, 12f));
+
+        // ✅ Ahora sí, cargar los restaurantes
         cargarRestaurantes();
     }
 
     private void cargarRestaurantes() {
-        if (tipoCocina != null && !tipoCocina.isEmpty()) {
+        if (tipoCocina != null && !tipoCocina.isEmpty() && !tipoCocina.equals("TODOS")) {
+            // Filtrar por tipo
             repository.getRestaurantesByTipo(tipoCocina, (value, error) -> {
                 if (error != null || value == null) return;
 
                 restaurantes.clear();
                 for (QueryDocumentSnapshot doc : value) {
                     Restaurante r = doc.toObject(Restaurante.class);
-                    r.setId(doc.getId());
-                    restaurantes.add(r);
+                    if (r != null && r.getUbicacion() != null) {
+                        r.setId(doc.getId());
+                        restaurantes.add(r);
+                    }
                 }
-
-                if (mMap != null) {
-                    agregarMarcadores();
-                }
+                agregarMarcadores();
             });
         } else {
+            // TODOS los restaurantes
             repository.getAllRestaurantes((value, error) -> {
                 if (error != null || value == null) return;
 
                 restaurantes.clear();
                 for (QueryDocumentSnapshot doc : value) {
                     Restaurante r = doc.toObject(Restaurante.class);
-                    r.setId(doc.getId());
-                    restaurantes.add(r);
+                    if (r != null && r.getUbicacion() != null) {
+                        r.setId(doc.getId());
+                        restaurantes.add(r);
+                    }
                 }
-
-                if (mMap != null) {
-                    agregarMarcadores();
-                }
+                agregarMarcadores();
             });
         }
     }
 
     private void agregarMarcadores() {
+        if (mMap == null) return;
+
         mMap.clear();
 
         for (Restaurante restaurante : restaurantes) {
@@ -99,18 +110,8 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
             );
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centro, 12));
         } else {
-            // 👇 AÑADE ESTE else
             LatLng zaragoza = new LatLng(41.6488, -0.8891);
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(zaragoza, 12));
         }
     }
-
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        agregarMarcadores();
-    }
-
-
 }

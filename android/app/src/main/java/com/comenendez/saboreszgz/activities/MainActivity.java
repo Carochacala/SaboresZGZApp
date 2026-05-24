@@ -26,6 +26,14 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.auth.FirebaseUser;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import android.util.Log;
+
 import androidx.appcompat.app.AlertDialog;
 
 
@@ -199,11 +207,32 @@ public class MainActivity extends AppCompatActivity {
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        // Login exitoso
-                        startActivity(new Intent(MainActivity.this, HomeActivity.class));
-                        finish();
+                        FirebaseUser user = auth.getCurrentUser();
+                        String uid = user.getUid();
+                        String email = user.getEmail();
+                        String nombre = user.getDisplayName();
+
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        db.collection("usuarios").document(uid).get()
+                                .addOnSuccessListener(documentSnapshot -> {
+                                    if (!documentSnapshot.exists()) {
+                                        Map<String, Object> nuevoUsuario = new HashMap<>();
+                                        nuevoUsuario.put("email", email);
+                                        nuevoUsuario.put("nombre", nombre);
+                                        nuevoUsuario.put("favoritos", new ArrayList<>());
+                                        nuevoUsuario.put("tipoUsuario", "usuario");
+                                        nuevoUsuario.put("fechaRegistro", FieldValue.serverTimestamp());
+                                        db.collection("usuarios").document(uid).set(nuevoUsuario);
+                                    }
+                                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                                    finish();
+                                })
+                                .addOnFailureListener(e -> {
+                                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                                    finish();
+                                });
+
                     } else {
-                        // Login falló
                         ToastHelper.mostrarError(this, "Error de autenticación");
                     }
                 });
