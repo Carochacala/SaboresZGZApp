@@ -57,8 +57,8 @@
                     android:isIndicator="true"
                     android:numStars="5"
                     android:rating="4"
-
-                    />
+                    android:progressTint="#FFC107"
+                    android:progressBackgroundTint="#E0E0E0" />
 
                 <TextView
                     android:id="@+id/tvDescripcionCortaRestaurante"

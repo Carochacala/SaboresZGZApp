@@ -6,6 +6,9 @@
     <color name="gris_clarito">#F9F9F9</color>
     <color name="gris_oscurito">#212121</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="colorPrincipal">#FF9800</color>
+
+    <color name="colorBase">#A2201C</color>
 
 
 </resources>

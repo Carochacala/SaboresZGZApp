@@ -39,11 +39,12 @@
                 android:id="@+id/nav_mapa"
                 android:icon="@android:drawable/ic_menu_mapmode"
                 android:title="@string/nav_mapa" />
-
+<!--
             <item
                 android:id="@+id/nav_cerca_de_mi"
                 android:icon="@android:drawable/ic_menu_myplaces"
                 android:title="@string/nav_cerca_de_mi" />
+-->
         </menu>
     </item>
 

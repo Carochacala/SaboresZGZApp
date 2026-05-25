@@ -14,7 +14,7 @@
         android:text="🎰 RULETA GASTRONÓMICA"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="#FF5722"
+        android:textColor="@color/colorBase"
         android:layout_marginBottom="16dp" />
 
     <ImageView
@@ -68,7 +68,7 @@
         android:layout_width="200dp"
         android:layout_height="60dp"
         android:text="🎲 GIRAR"
-        android:backgroundTint="#FF5722"
+        android:backgroundTint="@color/colorBase"
         android:textSize="20sp"
         android:textStyle="bold" />
 

@@ -18,6 +18,9 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
 
     private List<Restaurante> listaRestaurantes;
     private OnRestauranteClickListener listener;
+    //para filtro de busqueda
+    private List<Restaurante> listaOriginal;
+    private List<String> nombresFavoritos = new java.util.ArrayList<>();
 
     // ============================================================
     // INTERFAZ PARA MANEJAR CLICS
@@ -27,11 +30,15 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
     }
 
     // ============================================================
-    // CONSTRUCTOR
+    // CONSTRUCTOR modificado (filtro busqueda)
     // ============================================================
     public RestauranteAdapter(List<Restaurante> listaRestaurantes, OnRestauranteClickListener listener) {
         this.listaRestaurantes = listaRestaurantes;
         this.listener = listener;
+        this.listaOriginal = new java.util.ArrayList<>();
+        if (listaRestaurantes != null) {
+            this.listaOriginal.addAll(listaRestaurantes);
+        }
     }
 
     // ============================================================
@@ -119,6 +126,10 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
     // ============================================================
     public void updateList(List<Restaurante> nuevaLista) {
         this.listaRestaurantes = nuevaLista;
+        this.listaOriginal = new java.util.ArrayList<>();
+        if (nuevaLista != null) {
+            this.listaOriginal.addAll(nuevaLista); // Actualizamos la copia de seguridad también
+        }
         notifyDataSetChanged();
     }
 
@@ -139,5 +150,45 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
             tvDistanciaR = itemView.findViewById(R.id.tv_distanciaRestaurante);
             imgRestaurante = itemView.findViewById(R.id.imgRestaurante);
         }
+    }
+//para las busqueda de filtrad usamos este metodo
+    public void setNombresFavoritos(List<String> favoritos) {
+        this.nombresFavoritos = favoritos;
+    }
+    public void filtrar(String textoBuscado, int idChipSeleccionado) {
+        listaRestaurantes.clear();
+        String texto = textoBuscado.toLowerCase();
+
+        for (Restaurante restaurante : listaOriginal) {
+            // 1. Filtro de texto (Buscador)
+            boolean coincideTexto = false;
+            if (restaurante.getNombre() != null) {
+                coincideTexto = restaurante.getNombre().toLowerCase().contains(texto);
+            }
+
+            boolean pasaFiltroChip = true;
+
+            // 2. Filtros de los Chips
+            if (idChipSeleccionado == R.id.chipValorados) {
+                if (restaurante.getValoracionMedia() < 4.5) {
+                    pasaFiltroChip = false;
+                }
+            } else if (idChipSeleccionado == R.id.chipFavoritos) {
+                // Comprobamos si la lista descargada de Firebase contiene el ID o el Nombre del restaurante
+                if (nombresFavoritos == null ||
+                        (!nombresFavoritos.contains(restaurante.getId()) && !nombresFavoritos.contains(restaurante.getNombre()))) {
+                    pasaFiltroChip = false;
+                }
+            }
+
+            // 3. Aplicar resultados
+            if (coincideTexto && pasaFiltroChip) {
+                listaRestaurantes.add(restaurante);
+            }
+        }
+
+        // Avisamos al adaptador que los datos han cambiado
+        notifyDataSetChanged();
+
     }
 }

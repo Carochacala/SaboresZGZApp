@@ -9,29 +9,33 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="#F5F5F5">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#FF5722"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+            android:background="@color/colorBase"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:elevation="4dp" />
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="#FFFFFF"
+                android:padding="16dp"
+                android:layout_margin="12dp">
 
                 <ImageView
                     android:id="@+id/imgRestaurante"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="220dp"
                     android:scaleType="centerCrop"
                     android:src="@android:drawable/ic_menu_gallery" />
 
@@ -41,12 +45,14 @@
                     android:layout_height="wrap_content"
                     android:textSize="28sp"
                     android:textStyle="bold"
+                    android:textColor="@color/colorBase"
                     android:layout_marginTop="16dp" />
 
                 <TextView
                     android:id="@+id/tvDireccion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="#555555"
                     android:textSize="16sp"
                     android:layout_marginTop="8dp" />
 
@@ -54,46 +60,55 @@
                     android:id="@+id/tvHorario"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="#555555"
                     android:textSize="14sp"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginTop="4dp" />
 
                 <TextView
                     android:id="@+id/tvPlatoDestacado"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_marginTop="16dp" />
+                    android:textStyle="italic"
+                    android:layout_marginTop="12dp" />
 
                 <TextView
                     android:id="@+id/tvValoracion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
+                    android:textStyle="bold"
                     android:layout_marginTop="8dp" />
 
-                <!-- Mapa -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#E0E0E0"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="📍 Ubicación"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:layout_marginTop="16dp" />
+                    android:textColor="#333333" />
 
                 <fragment
                     android:id="@+id/mapa"
                     android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginTop="12dp" />
 
                 <Button
                     android:id="@+id/btnRuta"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="📍 Abrir ruta en Google Maps"
-                    android:backgroundTint="#4CAF50"
+                    app:backgroundTint="#4CAF50"
+                    android:textColor="#FFFFFF"
                     android:layout_marginTop="16dp" />
 
                 <Button
@@ -101,39 +116,34 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="📤 Compartir restaurante"
-                    android:backgroundTint="#2196F3"
+                    app:backgroundTint="#2196F3"
+                    android:textColor="#FFFFFF"
                     android:layout_marginTop="8dp" />
 
-                <!-- Valoraciones -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#E0E0E0"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="16dp"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="⭐ Valoraciones"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:layout_marginTop="16dp" />
+                    android:textColor="#333333" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <RatingBar
+                    android:id="@+id/ratingBar"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="8dp">
-
-                    <RatingBar
-                        android:id="@+id/ratingBar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:numStars="5"
-                        android:stepSize="1"
-                        android:layout_weight="1" />
-
-                    <Button
-                        android:id="@+id/btnEnviarValoracion"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Enviar" />
-
-                </LinearLayout>
+                    android:layout_marginTop="12dp"
+                    android:numStars="5"
+                    android:stepSize="1"
+                    android:progressTint="#FFC107"
+                    android:progressBackgroundTint="#E0E0E0" />
 
                 <EditText
                     android:id="@+id/etComentario"
@@ -141,27 +151,47 @@
                     android:layout_height="wrap_content"
                     android:hint="Escribe tu comentario..."
                     android:minLines="2"
+                    android:background="@android:color/transparent"
+                    android:padding="8dp"
                     android:layout_marginTop="8dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorBase"
+                    android:layout_marginBottom="12dp"/>
+
+                <Button
+                    android:id="@+id/btnEnviarValoracion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:backgroundTint="@color/colorBase"
+                    android:textColor="#FFFFFF"
+                    android:text="Enviar" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvValoraciones"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp" />
+                    android:layout_marginTop="24dp" />
 
                 <Button
                     android:id="@+id/btnFavorito"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="56dp"
                     android:text="Guardar en favoritos"
-                    android:layout_marginTop="24dp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/colorBase"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginBottom="16dp" />
 
             </LinearLayout>
         </ScrollView>
 
     </LinearLayout>
 
-    <!-- Menú lateral -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"

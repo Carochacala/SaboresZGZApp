@@ -4,14 +4,14 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="#FF5722"
+    android:background="@color/colorBase"
     android:padding="16dp">
 
     <ImageView
         android:id="@+id/ivAvatar"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:src="@android:drawable/ic_menu_camera" />
+        android:src="@android:drawable/ic_menu_gallery" />
 
     <TextView
         android:id="@+id/tvNombreUsuario"

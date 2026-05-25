@@ -34,6 +34,10 @@ public class RestauranteActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private NavigationView navigationView;
 
+    //Busqueda filtro
+    private String textoBuscadoActual = "";
+    private int chipSeleccionadoActual = android.view.View.NO_ID; // Significa que no hay ningún filtro pulsado al inicio
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +84,47 @@ public class RestauranteActivity extends AppCompatActivity {
             intent.putExtra("tipo_cocina", tipoCocina);
             startActivity(intent);
         });
+
+        //para filtro y busqueda
+
+        // Enlazar los componentes visuales
+        androidx.appcompat.widget.SearchView searchView = findViewById(R.id.searchViewRestaurantes);
+        com.google.android.material.chip.ChipGroup chipGroup = findViewById(R.id.chipGroupFiltros);
+
+        // 1. Escuchar el texto del buscador
+        searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) { return false; }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                textoBuscadoActual = newText;
+                // Enviamos AMBAS cosas al adaptador
+                adapter.filtrar(textoBuscadoActual, chipSeleccionadoActual);
+                return true;
+            }
+        });
+
+        // 2. Escuchar los clics en los botones de filtro (Chips)
+        chipGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            chipSeleccionadoActual = checkedId;
+            // Enviamos AMBAS cosas al adaptador
+            adapter.filtrar(textoBuscadoActual, chipSeleccionadoActual);
+        });
+
+        // Usamos el repositorio que creó tu compañera para obtener los IDs
+        com.comenendez.saboreszgz.data.FirebaseRepository repository = com.comenendez.saboreszgz.data.FirebaseRepository.getInstance();
+        repository.loadCurrentUser();
+
+        // Le damos medio segundo para que descargue los datos, igual que hace ella en su pantalla
+        new android.os.Handler().postDelayed(() -> {
+            java.util.List<String> misFavoritosIds = repository.getFavoriteIds();
+
+            // Si encontró favoritos, se los pasamos a tu adaptador
+            if (misFavoritosIds != null && adapter != null) {
+                adapter.setNombresFavoritos(misFavoritosIds);
+            }
+        }, 500);
     }
 
     private void cargarRestaurantes() {
