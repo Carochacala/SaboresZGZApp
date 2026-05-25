@@ -6,29 +6,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo_cielo"
+
     tools:context=".activities.MainActivity">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="449dp"
+        android:layout_height="733dp"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/login_box"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/canva_final" />
 
     <LinearLayout
+        android:id="@+id/login_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
-        android:layout_marginBottom="32dp"
-        android:background="#FFFFFF"
+        android:layout_marginBottom="16dp"
         android:alpha="0.95"
+        android:background="#FFFFFF"
         android:orientation="vertical"
-        android:padding="24dp"
+        android:padding="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -36,59 +38,69 @@
         <EditText
             android:id="@+id/etCorreo"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="48dp"
             android:background="#F0F0F0"
             android:hint="Correo electrónico"
-            android:textColor="#000000"
-            android:textColorHint="#757575"
             android:inputType="textEmailAddress"
-            android:padding="12dp" />
+            android:padding="12dp"
+            android:textColor="#000000"
+            android:textColorHint="#757575" />
 
         <EditText
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="16dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="12dp"
             android:background="#F0F0F0"
             android:hint="Contraseña"
-            android:textColor="#000000"
-            android:textColorHint="#757575"
             android:inputType="textPassword"
-            android:padding="12dp" />
+            android:padding="12dp"
+            android:textColor="#000000"
+            android:textColorHint="#757575" />
 
         <Button
             android:id="@+id/btnIniciarSesion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:backgroundTint="#212121"
-            android:text="Iniciar Sesión"
-            android:textColor="#FFFFFF" />
-
-        <!-- BOTÓN GOOGLE DE PRUEBA -->
-        <Button
-            android:id="@+id/btnGoogleSignIn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:backgroundTint="#00BCD4"
-            android:text="INICIAR CON GOOGLE"
+            android:layout_marginTop="16dp"
+            android:text="INICIAR SESIÓN"
             android:textColor="#FFFFFF"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/btnInvitado"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="Continuar como invitado"
-            android:backgroundTint="#BDBDBD"
-            android:textColor="#000000"/>
+            app:backgroundTint="@color/colorBase" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnGoogleSignIn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:text="Iniciar con GOOGLE"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:backgroundTint="#00BCD4" />
+
+            <Button
+                android:id="@+id/btnInvitado"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:text="Continuar como INVITADO"
+                android:textColor="#000000"
+                android:textSize="12sp"
+                app:backgroundTint="#BDBDBD" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -98,14 +110,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Regístrate"
-                android:textColor="#FF5722"
+                android:textColor="@color/colorBase"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvOlvidoPass"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="¿Olvidaste tu contraseña?"
+                android:text="¿Olvidaste la contraseña?"
                 android:textColor="#757575"
                 android:textSize="12sp" />
         </LinearLayout>
